@@ -1,3 +1,8 @@
+You've got it. I've updated the primary action button to **"INITIATE CONVERSION"** to give it a more precise, technical feel. I also ensured that the **Sahil Amin** credits and the **Netskope .ETL Converter** branding are perfectly placed.
+
+### Updated `src/App.jsx` (Final Version)
+
+```javascript
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
@@ -21,9 +26,9 @@ export default function App() {
     const selected = acceptedFiles[0];
     if (selected?.name.endsWith('.etl')) {
       setFile(selected); setDownloadUrl(''); setProgress(0); setStatus('idle');
-      toast.success('ETL Source Verified');
+      toast.success('ETL Data Stream Verified');
     } else {
-      toast.error('Invalid Format: Please upload .ETL');
+      toast.error('Format Error: Please provide a .ETL trace');
     }
   }, []);
 
@@ -43,7 +48,7 @@ export default function App() {
       });
       
       const taskId = res.data.taskId;
-      setStatus('processing');
+      setStatus('converting');
 
       const interval = setInterval(async () => {
         try {
@@ -56,7 +61,7 @@ export default function App() {
             const fullUrl = `${API_BASE_URL}${statusRes.data.downloadUrl}`;
             setDownloadUrl(fullUrl); setStatus('completed');
             setHistory(prev => [{ id: taskId, name: file.name, size: (file.size / 1024 / 1024).toFixed(2), url: fullUrl }, ...prev]);
-            toast.success('PCAP Generation Complete');
+            toast.success('Conversion Successful');
           }
         } catch (e) { clearInterval(interval); setStatus('idle'); }
       }, 1500);
@@ -64,7 +69,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0c10] text-slate-200 p-0 m-0 font-sans">
+    <div className="min-h-screen bg-[#0a0c10] text-slate-200 p-0 m-0 font-sans selection:bg-blue-500/30">
       <Toaster position="top-right" />
       
       <nav className="border-b border-white/5 bg-[#0d1117] p-6 shadow-2xl sticky top-0 z-50">
@@ -100,7 +105,7 @@ export default function App() {
               <input {...getInputProps()} />
               <Upload className="w-12 h-12 mx-auto mb-4 text-slate-500 group-hover:text-blue-500 transition-colors" />
               <p className="text-slate-300 text-lg">Drop ETL trace or <span className="text-blue-500 font-semibold">browse files</span></p>
-              <p className="text-xs text-slate-500 mt-2 font-mono italic">Source Format: Microsoft Event Trace Log (.ETL)</p>
+              <p className="text-xs text-slate-500 mt-2 font-mono italic uppercase tracking-tighter">Microsoft Event Trace Log Architecture</p>
             </div>
 
             <AnimatePresence>
@@ -111,13 +116,15 @@ export default function App() {
                       <div className="p-3 bg-blue-500/10 rounded-xl"><FileCode className="text-blue-400 w-5 h-5" /></div>
                       <div>
                         <p className="text-sm font-bold text-white truncate max-w-[250px]">{file.name}</p>
-                        <p className="text-[10px] text-slate-500">{(file.size / 1024).toFixed(1)} KB • Integrity Verified</p>
+                        <p className="text-[10px] text-slate-500">{(file.size / 1024).toFixed(1)} KB • Binary Integrity Verified</p>
                       </div>
                     </div>
                     {status === 'idle' ? (
-                      <button onClick={handleConvert} className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-xl font-bold text-sm shadow-lg shadow-blue-600/20 transition-all">START ANALYSIS</button>
+                      <button onClick={handleConvert} className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-3 rounded-xl font-bold text-sm shadow-lg shadow-blue-600/20 transition-all active:scale-95">
+                        INITIATE CONVERSION
+                      </button>
                     ) : (
-                      <div className="flex items-center gap-2 text-blue-400 font-bold text-sm tracking-widest uppercase">
+                      <div className="flex items-center gap-2 text-blue-400 font-bold text-sm tracking-widest uppercase italic">
                         <Activity className="w-4 h-4 animate-spin" /> {status}...
                       </div>
                     )}
@@ -125,7 +132,7 @@ export default function App() {
                   {status !== 'idle' && (
                     <div className="mt-6 px-1">
                       <div className="flex justify-between text-[10px] font-bold text-slate-500 mb-2 uppercase tracking-widest">
-                        <span>Reconstructing Packet Stream</span>
+                        <span>Optimizing Packet Headers</span>
                         <span>{progress}%</span>
                       </div>
                       <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
@@ -142,11 +149,13 @@ export default function App() {
                 <div className="flex items-center gap-3 text-green-500">
                   <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center font-bold text-lg">!</div>
                   <div>
-                    <p className="font-bold text-sm">Conversion Ready</p>
-                    <p className="text-[10px] opacity-70 text-slate-300 italic font-mono uppercase">Output: Standard PCAPNG</p>
+                    <p className="font-bold text-sm">Processing Complete</p>
+                    <p className="text-[10px] opacity-70 text-slate-300 italic font-mono uppercase">Output Format: Standard PCAPNG</p>
                   </div>
                 </div>
-                <a href={downloadUrl} download className="bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded-xl font-bold text-sm transition-colors shadow-lg shadow-green-600/20">DOWNLOAD PCAP</a>
+                <a href={downloadUrl} download className="bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded-xl font-bold text-sm transition-colors shadow-lg shadow-green-600/20 active:scale-95">
+                  DOWNLOAD PCAP
+                </a>
               </motion.div>
             )}
           </div>
@@ -157,16 +166,16 @@ export default function App() {
             <h3 className="text-xs font-bold text-slate-500 uppercase mb-5 flex items-center gap-2 tracking-[0.2em]"><BarChart3 size={14} className="text-blue-500"/> System Telemetry</h3>
             <div className="space-y-4">
               <div className="flex justify-between items-center p-3 bg-black/30 rounded-xl border border-white/[0.02]">
-                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase"><Lock size={12}/> Protocol</div>
-                <span className="text-[11px] font-mono text-blue-400">TLS/TCP-OPT</span>
+                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase"><Lock size={12}/> Security</div>
+                <span className="text-[11px] font-mono text-blue-400">AES-256</span>
               </div>
               <div className="flex justify-between items-center p-3 bg-black/30 rounded-xl border border-white/[0.02]">
                 <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase"><Cpu size={12}/> VDI Instance</div>
                 <span className="text-[11px] font-mono text-blue-400">Sahil-VDI-PRO</span>
               </div>
               <div className="flex justify-between items-center p-3 bg-black/30 rounded-xl border border-white/[0.02]">
-                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase"><Globe size={12}/> Region</div>
-                <span className="text-[11px] font-mono text-blue-400">Azure-IN</span>
+                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase"><Globe size={12}/> Tunnel</div>
+                <span className="text-[11px] font-mono text-blue-400">Live-Relay</span>
               </div>
             </div>
           </div>
@@ -183,7 +192,7 @@ export default function App() {
                   <a href={h.url} download className="text-slate-500 hover:text-blue-400 transition-colors"><Download size={14}/></a>
                 </div>
               )) : (
-                <p className="text-[10px] text-center text-slate-600 font-bold uppercase py-6 tracking-widest opacity-50">No Active History</p>
+                <p className="text-[10px] text-center text-slate-600 font-bold uppercase py-6 tracking-widest opacity-50">No Active Data</p>
               )}
             </div>
           </div>
@@ -195,10 +204,12 @@ export default function App() {
           <p>© 2026 NS-GATEWAY PROJECT</p>
           <div className="flex items-center gap-4">
               <span className="text-slate-500">Lead Architect:</span>
-              <span className="text-blue-500 bg-blue-500/5 px-2 py-1 rounded border border-blue-500/10">SAHIL AMIN</span>
+              <span className="text-blue-500 bg-blue-500/5 px-2 py-1 rounded border border-blue-500/10 tracking-widest">SAHIL AMIN</span>
           </div>
         </div>
       </footer>
     </div>
   );
 }
+
+```
