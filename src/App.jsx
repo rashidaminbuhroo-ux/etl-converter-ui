@@ -1,8 +1,3 @@
-You've got it. I've updated the primary action button to **"INITIATE CONVERSION"** to give it a more precise, technical feel. I also ensured that the **Sahil Amin** credits and the **Netskope .ETL Converter** branding are perfectly placed.
-
-### Updated `src/App.jsx` (Final Version)
-
-```javascript
 import React, { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
@@ -88,7 +83,7 @@ export default function App() {
               <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" /> VDI ONLINE
             </div>
             <div className="flex items-center gap-1.5 text-slate-400 text-[10px] font-bold uppercase tracking-tighter">
-                <User size={12} className="text-blue-500" /> Lead Architect: Sahil Amin
+                <User size={12} className="text-blue-500" /> Designed by: Sahil Amin
             </div>
           </div>
         </div>
@@ -170,12 +165,12 @@ export default function App() {
                 <span className="text-[11px] font-mono text-blue-400">AES-256</span>
               </div>
               <div className="flex justify-between items-center p-3 bg-black/30 rounded-xl border border-white/[0.02]">
-                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase"><Cpu size={12}/> VDI Instance</div>
+                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase"><Cpu size={12}/> Engine Architecture</div>
                 <span className="text-[11px] font-mono text-blue-400">Sahil-VDI-PRO</span>
               </div>
               <div className="flex justify-between items-center p-3 bg-black/30 rounded-xl border border-white/[0.02]">
-                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase"><Globe size={12}/> Tunnel</div>
-                <span className="text-[11px] font-mono text-blue-400">Live-Relay</span>
+                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase"><Globe size={12}/> Relay</div>
+                <span className="text-[11px] font-mono text-blue-400">Live-Tunnel</span>
               </div>
             </div>
           </div>
@@ -192,7 +187,7 @@ export default function App() {
                   <a href={h.url} download className="text-slate-500 hover:text-blue-400 transition-colors"><Download size={14}/></a>
                 </div>
               )) : (
-                <p className="text-[10px] text-center text-slate-600 font-bold uppercase py-6 tracking-widest opacity-50">No Active Data</p>
+                <p className="text-[10px] text-center text-slate-600 font-bold uppercase py-6 tracking-widest opacity-50">No Session Logs</p>
               )}
             </div>
           </div>
@@ -203,7 +198,7 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-6 flex justify-between items-center text-[10px] font-bold uppercase tracking-[0.4em] text-slate-600">
           <p>© 2026 NS-GATEWAY PROJECT</p>
           <div className="flex items-center gap-4">
-              <span className="text-slate-500">Lead Architect:</span>
+              <span className="text-slate-500 italic">Designed by:</span>
               <span className="text-blue-500 bg-blue-500/5 px-2 py-1 rounded border border-blue-500/10 tracking-widest">SAHIL AMIN</span>
           </div>
         </div>
@@ -211,5 +206,3 @@ export default function App() {
     </div>
   );
 }
-
-```
