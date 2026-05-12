@@ -5,7 +5,7 @@ import { Toaster, toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ShieldCheck, Upload, FileCode, Download, 
-  Activity, Zap, History, Globe, Lock, Cpu, BarChart3, User
+  Activity, Zap, History, User
 } from 'lucide-react';
 
 const API_BASE_URL = 'https://secluding-dropout-passion.ngrok-free.dev';
@@ -156,28 +156,11 @@ export default function App() {
           </div>
         </div>
 
+        {/* Updated History Section (Now prominent in the right column) */}
         <div className="space-y-6">
-          <div className="bg-[#161b22] border border-white/5 rounded-3xl p-6 shadow-xl">
-            <h3 className="text-xs font-bold text-slate-500 uppercase mb-5 flex items-center gap-2 tracking-[0.2em]"><BarChart3 size={14} className="text-blue-500"/> System Telemetry</h3>
-            <div className="space-y-4">
-              <div className="flex justify-between items-center p-3 bg-black/30 rounded-xl border border-white/[0.02]">
-                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase"><Lock size={12}/> Security</div>
-                <span className="text-[11px] font-mono text-blue-400">AES-256</span>
-              </div>
-              <div className="flex justify-between items-center p-3 bg-black/30 rounded-xl border border-white/[0.02]">
-                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase"><Cpu size={12}/> Engine Architecture</div>
-                <span className="text-[11px] font-mono text-blue-400">Sahil-VDI-PRO</span>
-              </div>
-              <div className="flex justify-between items-center p-3 bg-black/30 rounded-xl border border-white/[0.02]">
-                <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase"><Globe size={12}/> Relay</div>
-                <span className="text-[11px] font-mono text-blue-400">Live-Tunnel</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-[#161b22] border border-white/5 rounded-3xl p-6 shadow-xl">
+          <div className="bg-[#161b22] border border-white/5 rounded-3xl p-6 shadow-xl h-full">
             <h3 className="text-xs font-bold text-slate-500 uppercase mb-5 flex items-center gap-2 tracking-[0.2em]"><History size={14} className="text-blue-500"/> Recent Sessions</h3>
-            <div className="space-y-3 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
+            <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
               {history.length > 0 ? history.map((h, i) => (
                 <div key={i} className="flex justify-between items-center p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:border-blue-500/30 transition-all group">
                   <div className="flex items-center gap-3 truncate">
@@ -187,7 +170,10 @@ export default function App() {
                   <a href={h.url} download className="text-slate-500 hover:text-blue-400 transition-colors"><Download size={14}/></a>
                 </div>
               )) : (
-                <p className="text-[10px] text-center text-slate-600 font-bold uppercase py-6 tracking-widest opacity-50">No Session Logs</p>
+                <div className="flex flex-col items-center justify-center py-12 opacity-30">
+                   <History size={32} className="mb-2 text-slate-600" />
+                   <p className="text-[10px] text-center text-slate-600 font-bold uppercase tracking-widest">No Active Sessions</p>
+                </div>
               )}
             </div>
           </div>
