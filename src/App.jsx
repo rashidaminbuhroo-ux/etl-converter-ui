@@ -38,8 +38,13 @@ export default function App() {
     formData.append('file', file);
     
     try {
+      // 🎯 FIXED: Added timeout: 0 and headers for large file stability
       const res = await axios.post(`${API_BASE_URL}/api/convert`, formData, {
-        headers: { "ngrok-skip-browser-warning": "69420" }
+        headers: { 
+          "ngrok-skip-browser-warning": "69420",
+          "Content-Type": "multipart/form-data"
+        },
+        timeout: 0 // Wait indefinitely for big files
       });
       
       const taskId = res.data.taskId;
@@ -59,8 +64,8 @@ export default function App() {
             toast.success('Conversion Successful');
           }
         } catch (e) { clearInterval(interval); setStatus('idle'); }
-      }, 1500);
-    } catch (err) { setStatus('idle'); toast.error('VDI Engine Offline'); }
+      }, 2000); // Polling every 2 seconds for server stability
+    } catch (err) { setStatus('idle'); toast.error('VDI Engine Offline or Timeout'); }
   };
 
   return (
@@ -74,8 +79,10 @@ export default function App() {
               <ShieldCheck className="text-white w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-white tracking-tight">NS-GATEWAY <span className="text-blue-400 text-xs font-mono ml-2 border border-blue-400/30 px-1 rounded">V4.0 PRO</span></h1>
-              <p className="text-[10px] text-slate-500 uppercase font-bold tracking-widest italic">Netskope .ETL Converter</p>
+              <h1 className="text-xl font-bold text-white tracking-tight uppercase">
+                NS-GATEWAY <span className="text-blue-400 text-xs font-mono ml-2 border border-blue-400/30 px-1 rounded">V4.0 PRO</span>
+              </h1>
+              {/* 🎯 Subtitle removed for a cleaner look */}
             </div>
           </div>
           <div className="flex flex-col items-end">
@@ -100,7 +107,7 @@ export default function App() {
               <input {...getInputProps()} />
               <Upload className="w-12 h-12 mx-auto mb-4 text-slate-500 group-hover:text-blue-500 transition-colors" />
               <p className="text-slate-300 text-lg">Drop ETL trace or <span className="text-blue-500 font-semibold">browse files</span></p>
-              <p className="text-xs text-slate-500 mt-2 font-mono italic uppercase tracking-tighter">Microsoft Event Trace Log Architecture</p>
+              <p className="text-xs text-slate-500 mt-2 font-mono italic uppercase tracking-tighter">Native Binary Reconstruction Engine</p>
             </div>
 
             <AnimatePresence>
@@ -111,7 +118,7 @@ export default function App() {
                       <div className="p-3 bg-blue-500/10 rounded-xl"><FileCode className="text-blue-400 w-5 h-5" /></div>
                       <div>
                         <p className="text-sm font-bold text-white truncate max-w-[250px]">{file.name}</p>
-                        <p className="text-[10px] text-slate-500">{(file.size / 1024).toFixed(1)} KB • Binary Integrity Verified</p>
+                        <p className="text-[10px] text-slate-500">{(file.size / 1024).toFixed(1)} KB • Integrity Verified</p>
                       </div>
                     </div>
                     {status === 'idle' ? (
@@ -156,7 +163,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* Updated History Section (Now prominent in the right column) */}
         <div className="space-y-6">
           <div className="bg-[#161b22] border border-white/5 rounded-3xl p-6 shadow-xl h-full">
             <h3 className="text-xs font-bold text-slate-500 uppercase mb-5 flex items-center gap-2 tracking-[0.2em]"><History size={14} className="text-blue-500"/> Recent Sessions</h3>
