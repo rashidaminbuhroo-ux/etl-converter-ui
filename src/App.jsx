@@ -17,6 +17,32 @@ export default function App() {
   const [downloadUrl, setDownloadUrl] = useState('');
   const [history, setHistory] = useState([]);
 
+  // 🎯 NEW: Direct Download Bypass Function
+  const handleDownload = async (url, filename) => {
+    const loadingToast = toast.loading("Preparing secure download...");
+    try {
+      const response = await axios.get(url, {
+        headers: { "ngrok-skip-browser-warning": "69420" },
+        responseType: 'blob',
+      });
+
+      const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      // Ensure it has .pcap extension
+      const finalName = filename.toLowerCase().endsWith('.pcap') ? filename : `${filename.split('.')[0]}.pcap`;
+      link.setAttribute('download', finalName);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(blobUrl);
+      toast.success("Download Started", { id: loadingToast });
+    } catch (error) {
+      console.error(error);
+      toast.error("VDI Connection Lost. Please refresh.", { id: loadingToast });
+    }
+  };
+
   const onDrop = useCallback((acceptedFiles) => {
     const selected = acceptedFiles[0];
     if (selected?.name.endsWith('.etl')) {
@@ -38,13 +64,12 @@ export default function App() {
     formData.append('file', file);
     
     try {
-      // 🎯 FIXED: Added timeout: 0 and headers for large file stability
       const res = await axios.post(`${API_BASE_URL}/api/convert`, formData, {
         headers: { 
           "ngrok-skip-browser-warning": "69420",
           "Content-Type": "multipart/form-data"
         },
-        timeout: 0 // Wait indefinitely for big files
+        timeout: 0 
       });
       
       const taskId = res.data.taskId;
@@ -64,7 +89,7 @@ export default function App() {
             toast.success('Conversion Successful');
           }
         } catch (e) { clearInterval(interval); setStatus('idle'); }
-      }, 2000); // Polling every 2 seconds for server stability
+      }, 2000); 
     } catch (err) { setStatus('idle'); toast.error('VDI Engine Offline or Timeout'); }
   };
 
@@ -82,7 +107,6 @@ export default function App() {
               <h1 className="text-xl font-bold text-white tracking-tight uppercase">
                 NS-GATEWAY <span className="text-blue-400 text-xs font-mono ml-2 border border-blue-400/30 px-1 rounded">V4.0 PRO</span>
               </h1>
-              {/* 🎯 Subtitle removed for a cleaner look */}
             </div>
           </div>
           <div className="flex flex-col items-end">
@@ -155,9 +179,13 @@ export default function App() {
                     <p className="text-[10px] opacity-70 text-slate-300 italic font-mono uppercase">Output Format: Standard PCAPNG</p>
                   </div>
                 </div>
-                <a href={downloadUrl} download className="bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded-xl font-bold text-sm transition-colors shadow-lg shadow-green-600/20 active:scale-95">
+                {/* 🎯 Updated Button for Direct Download Bypass */}
+                <button 
+                  onClick={() => handleDownload(downloadUrl, file.name)}
+                  className="bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded-xl font-bold text-sm transition-colors shadow-lg shadow-green-600/20 active:scale-95"
+                >
                   DOWNLOAD PCAP
-                </a>
+                </button>
               </motion.div>
             )}
           </div>
@@ -173,7 +201,13 @@ export default function App() {
                     <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400 font-bold text-[8px]">PCAP</div>
                     <span className="text-[11px] font-bold text-slate-300 truncate">{h.name}</span>
                   </div>
-                  <a href={h.url} download className="text-slate-500 hover:text-blue-400 transition-colors"><Download size={14}/></a>
+                  {/* 🎯 Updated Link for Direct Download Bypass */}
+                  <button 
+                    onClick={() => handleDownload(h.url, h.name)}
+                    className="text-slate-500 hover:text-blue-400 transition-colors"
+                  >
+                    <Download size={14}/>
+                  </button>
                 </div>
               )) : (
                 <div className="flex flex-col items-center justify-center py-12 opacity-30">
