@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Toaster, toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Upload, FileCode, Activity, Zap, Sun, Moon, ShieldCheck, Cpu, FolderHeart 
+  Upload, FileCode, Activity, Zap, Sun, Moon, ShieldCheck, Cpu, FolderHeart, History, Download 
 } from 'lucide-react';
 
 const API_BASE_URL = 'https://occupancy-saturate-handyman.ngrok-free.dev';
@@ -14,6 +14,7 @@ export default function App() {
   const [status, setStatus] = useState('idle'); 
   const [progress, setProgress] = useState(0);
   const [downloadUrl, setDownloadUrl] = useState('');
+  const [history, setHistory] = useState([]);
   const [darkMode, setDarkMode] = useState(true);
   const [vdiOnline, setVdiOnline] = useState(false);
 
@@ -105,6 +106,8 @@ export default function App() {
             clearInterval(interval);
             const fullUrl = `${API_BASE_URL}${statusRes.data.downloadUrl}`;
             setDownloadUrl(fullUrl); setStatus('completed');
+            // ✅ Sessions are actively updated here into history tracking storage
+            setHistory(prev => [{ id: taskId, name: file.name, size: (file.size / 1024 / 1024).toFixed(2), url: fullUrl }, ...prev]);
             toast.success('Conversion Successful');
           }
         } catch (e) { clearInterval(interval); setStatus('idle'); }
@@ -172,7 +175,6 @@ export default function App() {
               <Zap className="text-blue-500 w-5 h-5" /> PCAP Reconstruction
             </h2>
             
-            {/* Clean Dropzone Area — Target label completely removed */}
             <div {...getRootProps()} className={`group border-2 border-dashed rounded-2xl p-16 text-center cursor-pointer transition-all duration-300 ${isDragActive ? 'border-blue-500 bg-blue-500/5' : darkMode ? 'border-slate-800 hover:border-blue-500/40 hover:bg-white/[0.01]' : 'border-slate-300 hover:border-blue-500/40 hover:bg-slate-50'}`}>
               <input {...getInputProps()} />
               <Upload className="w-12 h-12 mx-auto mb-4 text-slate-400 group-hover:text-blue-500 transition-colors duration-300" />
@@ -238,10 +240,10 @@ export default function App() {
             )}
           </div>
 
-          {/* 🌟 NEW DESIGN: Separate, High-Fidelity Operational Guide Blueprint Card */}
+          {/* 🌟 SIMPLIFIED "HOW IT WORKS" FLOW CARD */}
           <div className={`border rounded-3xl p-8 shadow-lg transition-all duration-500 ${darkMode ? 'bg-[#0f121a]/60 border-white/5' : 'bg-[#f8fafc] border-slate-200/80'}`}>
             <h3 className={`text-xs font-bold uppercase tracking-widest mb-6 flex items-center gap-2 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping" /> Operational Blueprint
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" /> How it works
             </h3>
             
             <div className="grid md:grid-cols-3 gap-6 relative">
@@ -252,10 +254,10 @@ export default function App() {
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center border font-mono text-xs font-bold ${darkMode ? 'bg-white/5 border-white/10 text-blue-400' : 'bg-white border-slate-200 text-blue-600 shadow-sm'}`}>
                     <ShieldCheck size={16} />
                   </div>
-                  <span className={`text-xs font-bold uppercase tracking-wider ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>1. Handshake</span>
+                  <span className={`text-xs font-bold uppercase tracking-wider ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>1. Secure Upload</span>
                 </div>
                 <p className={`text-xs leading-relaxed pl-11 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                  Upload native Windows log (.ETL) captures straight through the secure browser panel interface.
+                  The file is securely transmitted from this web interface through an encrypted ngrok tunnel gateway.
                 </p>
               </div>
 
@@ -265,10 +267,10 @@ export default function App() {
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center border font-mono text-xs font-bold ${darkMode ? 'bg-white/5 border-white/10 text-blue-400' : 'bg-white border-slate-200 text-blue-600 shadow-sm'}`}>
                     <Cpu size={16} />
                   </div>
-                  <span className={`text-xs font-bold uppercase tracking-wider ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>2. Extraction</span>
+                  <span className={`text-xs font-bold uppercase tracking-wider ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>2. VDI Conversion</span>
                 </div>
                 <p className={`text-xs leading-relaxed pl-11 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                  The pipeline securely relays the file via an encrypted bridge into a private VDI container for execution.
+                  The backend server on the private VDI catches the incoming data and runs a native converter to recompile the capture.
                 </p>
               </div>
 
@@ -278,15 +280,37 @@ export default function App() {
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center border font-mono text-xs font-bold ${darkMode ? 'bg-white/5 border-white/10 text-blue-400' : 'bg-white border-slate-200 text-blue-600 shadow-sm'}`}>
                     <FolderHeart size={16} />
                   </div>
-                  <span className={`text-xs font-bold uppercase tracking-wider ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>3. Acquisition</span>
+                  <span className={`text-xs font-bold uppercase tracking-wider ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>3. Direct Download</span>
                 </div>
                 <p className={`text-xs leading-relaxed pl-11 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
-                  Retrieve standard Wireshark-compatible (.PCAP) files compiled with 100% data fidelity back to your local terminal.
+                  The converted, Wireshark-ready .PCAP trace file is routed directly back to your browser tab for instant download.
                 </p>
               </div>
 
             </div>
           </div>
+
+          {/* 🌟 RECENT SESSIONS AUDIT TRAIL — Clean row layout directly below the guides */}
+          {history.length > 0 && (
+            <div className={`border rounded-3xl p-6 shadow-md transition-all duration-500 backdrop-blur-sm ${darkMode ? 'bg-[#12161f]/40 border-white/5' : 'bg-white/40 border-slate-200'}`}>
+              <h3 className="text-xs font-bold text-slate-400 uppercase mb-4 flex items-center gap-2 tracking-widest">
+                <History size={14} className="text-blue-500"/> Recent Workspace Sessions
+              </h3>
+              <div className="grid sm:grid-cols-2 gap-3 max-h-[250px] overflow-y-auto pr-1">
+                {history.map((h, i) => (
+                  <div key={i} className={`flex justify-between items-center p-3 rounded-xl border transition-all duration-300 ${darkMode ? 'bg-white/[0.02] border-white/5 hover:border-blue-500/30' : 'bg-slate-50 border-slate-200 hover:border-blue-500/30'}`}>
+                    <div className="flex items-center gap-3 truncate">
+                      <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 font-bold text-[8px] tracking-tighter shrink-0">PCAP</div>
+                      <span className="text-[11px] font-bold truncate">{h.name}</span>
+                    </div>
+                    <button onClick={() => handleDownload(h.url, h.name)} className="text-slate-400 hover:text-blue-500 transition-colors pl-2 shrink-0">
+                      <Download size={14}/>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
         </main>
 
