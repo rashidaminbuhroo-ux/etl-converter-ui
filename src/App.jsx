@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Toaster, toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Upload, FileCode, Download, Activity, Zap, History, Sun, Moon 
+  Upload, FileCode, Activity, Zap, Sun, Moon, ShieldCheck, Cpu, FolderHeart 
 } from 'lucide-react';
 
 const API_BASE_URL = 'https://occupancy-saturate-handyman.ngrok-free.dev';
@@ -14,11 +14,9 @@ export default function App() {
   const [status, setStatus] = useState('idle'); 
   const [progress, setProgress] = useState(0);
   const [downloadUrl, setDownloadUrl] = useState('');
-  const [history, setHistory] = useState([]);
   const [darkMode, setDarkMode] = useState(true);
   const [vdiOnline, setVdiOnline] = useState(false);
 
-  // 🔄 Background connection loop with bypass header added to unblock the red indicator
   useEffect(() => {
     const checkVDIHealth = async () => {
       try {
@@ -37,7 +35,6 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // 📥 Secure pipeline download method passing the custom browser header
   const handleDownload = async (url, filename) => {
     const loadingToast = toast.loading("Preparing secure download...");
     try {
@@ -108,7 +105,6 @@ export default function App() {
             clearInterval(interval);
             const fullUrl = `${API_BASE_URL}${statusRes.data.downloadUrl}`;
             setDownloadUrl(fullUrl); setStatus('completed');
-            setHistory(prev => [{ id: taskId, name: file.name, size: (file.size / 1024 / 1024).toFixed(2), url: fullUrl }, ...prev]);
             toast.success('Conversion Successful');
           }
         } catch (e) { clearInterval(interval); setStatus('idle'); }
@@ -119,6 +115,7 @@ export default function App() {
   return (
     <div className={`min-h-screen transition-colors duration-500 font-sans selection:bg-blue-500/30 relative overflow-x-hidden ${darkMode ? 'bg-[#07090e] text-slate-200' : 'bg-slate-50 text-slate-800'}`}>
       
+      {/* Background Tech Grids & Ambient Glow Layers */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div 
           className="absolute inset-0 opacity-[0.03] transition-opacity duration-500" 
@@ -142,7 +139,7 @@ export default function App() {
         <Toaster position="top-right" />
         
         <nav className={`border-b p-6 shadow-sm sticky top-0 backdrop-blur-md z-50 transition-colors duration-500 ${darkMode ? 'bg-[#0d1117]/80 border-white/5' : 'bg-white/80 border-slate-200'}`}>
-          <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div className="max-w-4xl mx-auto flex justify-between items-center">
             <div className="flex items-center gap-4">
               <h1 className={`text-xl font-bold tracking-tight uppercase ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                 ETL Converter
@@ -167,107 +164,134 @@ export default function App() {
           </div>
         </nav>
 
-        <main className="max-w-6xl mx-auto px-6 py-12 grid lg:grid-cols-3 gap-8 flex-grow w-full">
-          <div className="lg:col-span-2">
-            <div className={`border rounded-3xl p-8 shadow-xl transition-all duration-500 backdrop-blur-sm ${darkMode ? 'bg-[#12161f]/90 border-white/5' : 'bg-white/90 border-slate-200'}`}>
-              <h2 className={`text-2xl font-bold mb-6 flex items-center gap-3 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
-                <Zap className="text-blue-500 w-5 h-5" /> PCAP Reconstruction
-              </h2>
-              
-              <div {...getRootProps()} className={`group border-2 border-dashed rounded-2xl p-16 text-center cursor-pointer transition-all duration-300 ${isDragActive ? 'border-blue-500 bg-blue-500/5' : darkMode ? 'border-slate-800 hover:border-blue-500/40 hover:bg-white/[0.01]' : 'border-slate-300 hover:border-blue-500/40 hover:bg-slate-50'}`}>
-                <input {...getInputProps()} />
-                <Upload className="w-12 h-12 mx-auto mb-4 text-slate-400 group-hover:text-blue-500 transition-colors duration-300" />
-                <p className="text-lg">Drop ETL trace or <span className="text-blue-500 font-semibold">browse files</span></p>
-                <p className="text-xs text-slate-400 mt-2 font-mono uppercase tracking-tighter">Automated Clean Room Environment • Active Retention Lifecycle: 1 Hour</p>
-              </div>
+        <main className="max-w-4xl mx-auto px-6 py-12 flex-grow w-full space-y-8">
+          
+          {/* Main Interface Workspace Card */}
+          <div className={`border rounded-3xl p-8 shadow-xl transition-all duration-500 backdrop-blur-sm ${darkMode ? 'bg-[#12161f]/90 border-white/5' : 'bg-white/90 border-slate-200'}`}>
+            <h2 className={`text-2xl font-bold mb-6 flex items-center gap-3 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+              <Zap className="text-blue-500 w-5 h-5" /> PCAP Reconstruction
+            </h2>
+            
+            {/* Clean Dropzone Area — Target label completely removed */}
+            <div {...getRootProps()} className={`group border-2 border-dashed rounded-2xl p-16 text-center cursor-pointer transition-all duration-300 ${isDragActive ? 'border-blue-500 bg-blue-500/5' : darkMode ? 'border-slate-800 hover:border-blue-500/40 hover:bg-white/[0.01]' : 'border-slate-300 hover:border-blue-500/40 hover:bg-slate-50'}`}>
+              <input {...getInputProps()} />
+              <Upload className="w-12 h-12 mx-auto mb-4 text-slate-400 group-hover:text-blue-500 transition-colors duration-300" />
+              <p className="text-lg">Drop ETL trace or <span className="text-blue-500 font-semibold">browse files</span></p>
+            </div>
 
-              <AnimatePresence>
-                {file && (
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-8">
-                    <div className={`p-5 rounded-2xl flex justify-between items-center border transition-colors duration-500 ${darkMode ? 'bg-black/30 border-white/5' : 'bg-slate-100 border-slate-200'}`}>
-                      <div className="flex items-center gap-4">
-                        <div className="p-3 bg-blue-500/10 rounded-xl"><FileCode className="text-blue-400 w-5 h-5" /></div>
-                        <div>
-                          <p className={`text-sm font-bold truncate max-w-[250px] ${darkMode ? 'text-white' : 'text-slate-900'}`}>{file.name}</p>
-                          <p className="text-[10px] text-slate-400">{(file.size / 1024).toFixed(1)} KB</p>
-                        </div>
+            <AnimatePresence>
+              {file && (
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-8">
+                  <div className={`p-5 rounded-2xl flex justify-between items-center border transition-colors duration-500 ${darkMode ? 'bg-black/30 border-white/5' : 'bg-slate-100 border-slate-200'}`}>
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 bg-blue-500/10 rounded-xl"><FileCode className="text-blue-400 w-5 h-5" /></div>
+                      <div>
+                        <p className={`text-sm font-bold truncate max-w-[250px] ${darkMode ? 'text-white' : 'text-slate-900'}`}>{file.name}</p>
+                        <p className="text-[10px] text-slate-400">{(file.size / 1024).toFixed(1)} KB</p>
                       </div>
-                      {status === 'idle' ? (
-                        <button 
-                          onClick={handleConvert} 
-                          disabled={!vdiOnline}
-                          className={`px-8 py-3 rounded-xl font-bold text-sm shadow-lg transition-all active:scale-95 ${!vdiOnline ? 'bg-slate-400 cursor-not-allowed text-slate-100 shadow-none' : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/20'}`}
-                        >
-                          INITIATE CONVERSION
-                        </button>
-                      ) : (
-                        <div className="flex items-center gap-2 text-blue-500 font-bold text-sm uppercase italic">
-                          <Activity className="w-4 h-4 animate-spin" /> {status}...
-                        </div>
-                      )}
                     </div>
-                    {status !== 'idle' && (
-                      <div className="mt-6 px-1">
-                        <div className="flex justify-between text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-widest">
-                          <span>Optimizing Packet Headers</span>
-                          <span>{progress}%</span>
-                        </div>
-                        <div className={`h-1.5 w-full rounded-full overflow-hidden transition-colors duration-500 ${darkMode ? 'bg-slate-800' : 'bg-slate-200'}`}>
-                          <div className="h-full bg-gradient-to-r from-blue-600 to-indigo-500 transition-all duration-500" style={{ width: `${progress}%` }} />
-                        </div>
+                    {status === 'idle' ? (
+                      <button 
+                        onClick={handleConvert} 
+                        disabled={!vdiOnline}
+                        className={`px-8 py-3 rounded-xl font-bold text-sm shadow-lg transition-all active:scale-95 ${!vdiOnline ? 'bg-slate-400 cursor-not-allowed text-slate-100 shadow-none' : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/20'}`}
+                      >
+                        INITIATE CONVERSION
+                      </button>
+                    ) : (
+                      <div className="flex items-center gap-2 text-blue-500 font-bold text-sm uppercase italic">
+                        <Activity className="w-4 h-4 animate-spin" /> {status}...
                       </div>
                     )}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {status === 'completed' && (
-                <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className={`mt-6 p-6 border rounded-2xl flex justify-between items-center transition-colors duration-500 ${darkMode ? 'bg-green-500/5 border-green-500/20' : 'bg-green-50/50 border-green-200'}`}>
-                  <div className="flex items-center gap-3 text-green-600">
-                    <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center font-bold text-lg">✓</div>
-                    <div>
-                      <p className="font-bold text-sm">Processing Complete</p>
-                      <p className="text-[10px] opacity-70 italic font-mono uppercase">VDI Storage Lifecycle Flagged: Purge scheduled in 1 Hour</p>
-                    </div>
                   </div>
-                  <button 
-                    onClick={() => handleDownload(downloadUrl, file.name)}
-                    className="bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded-xl font-bold text-sm transition-colors shadow-lg shadow-green-600/20 active:scale-95"
-                  >
-                    DOWNLOAD PCAP
-                  </button>
+                  {status !== 'idle' && (
+                    <div className="mt-6 px-1">
+                      <div className="flex justify-between text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-widest">
+                        <span>Optimizing Packet Headers</span>
+                        <span>{progress}%</span>
+                      </div>
+                      <div className={`h-1.5 w-full rounded-full overflow-hidden transition-colors duration-500 ${darkMode ? 'bg-slate-800' : 'bg-slate-200'}`}>
+                        <div className="h-full bg-gradient-to-r from-blue-600 to-indigo-500 transition-all duration-500" style={{ width: `${progress}%` }} />
+                      </div>
+                    </div>
+                  )}
                 </motion.div>
               )}
+            </AnimatePresence>
+
+            {status === 'completed' && (
+              <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className={`mt-6 p-6 border rounded-2xl flex justify-between items-center transition-colors duration-500 ${darkMode ? 'bg-green-500/5 border-green-500/20' : 'bg-green-50/50 border-green-200'}`}>
+                <div className="flex items-center gap-3 text-green-600">
+                  <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center font-bold text-lg">✓</div>
+                  <div>
+                    <p className="font-bold text-sm">Processing Complete</p>
+                    <p className="text-[10px] opacity-70 italic font-mono uppercase">VDI Storage Lifecycle Flagged: Purge scheduled in 1 Hour</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => handleDownload(downloadUrl, file.name)}
+                  className="bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded-xl font-bold text-sm transition-colors shadow-lg shadow-green-600/20 active:scale-95"
+                >
+                  DOWNLOAD PCAP
+                </button>
+              </motion.div>
+            )}
+          </div>
+
+          {/* 🌟 NEW DESIGN: Separate, High-Fidelity Operational Guide Blueprint Card */}
+          <div className={`border rounded-3xl p-8 shadow-lg transition-all duration-500 ${darkMode ? 'bg-[#0f121a]/60 border-white/5' : 'bg-[#f8fafc] border-slate-200/80'}`}>
+            <h3 className={`text-xs font-bold uppercase tracking-widest mb-6 flex items-center gap-2 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping" /> Operational Blueprint
+            </h3>
+            
+            <div className="grid md:grid-cols-3 gap-6 relative">
+              
+              {/* Step 1 */}
+              <div className="flex flex-col space-y-2 relative">
+                <div className="flex items-center gap-3">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center border font-mono text-xs font-bold ${darkMode ? 'bg-white/5 border-white/10 text-blue-400' : 'bg-white border-slate-200 text-blue-600 shadow-sm'}`}>
+                    <ShieldCheck size={16} />
+                  </div>
+                  <span className={`text-xs font-bold uppercase tracking-wider ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>1. Handshake</span>
+                </div>
+                <p className={`text-xs leading-relaxed pl-11 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                  Upload native Windows log (.ETL) captures straight through the secure browser panel interface.
+                </p>
+              </div>
+
+              {/* Step 2 */}
+              <div className="flex flex-col space-y-2 relative">
+                <div className="flex items-center gap-3">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center border font-mono text-xs font-bold ${darkMode ? 'bg-white/5 border-white/10 text-blue-400' : 'bg-white border-slate-200 text-blue-600 shadow-sm'}`}>
+                    <Cpu size={16} />
+                  </div>
+                  <span className={`text-xs font-bold uppercase tracking-wider ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>2. Extraction</span>
+                </div>
+                <p className={`text-xs leading-relaxed pl-11 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                  The pipeline securely relays the file via an encrypted bridge into a private VDI container for execution.
+                </p>
+              </div>
+
+              {/* Step 3 */}
+              <div className="flex flex-col space-y-2 relative">
+                <div className="flex items-center gap-3">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center border font-mono text-xs font-bold ${darkMode ? 'bg-white/5 border-white/10 text-blue-400' : 'bg-white border-slate-200 text-blue-600 shadow-sm'}`}>
+                    <FolderHeart size={16} />
+                  </div>
+                  <span className={`text-xs font-bold uppercase tracking-wider ${darkMode ? 'text-slate-300' : 'text-slate-700'}`}>3. Acquisition</span>
+                </div>
+                <p className={`text-xs leading-relaxed pl-11 ${darkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                  Retrieve standard Wireshark-compatible (.PCAP) files compiled with 100% data fidelity back to your local terminal.
+                </p>
+              </div>
+
             </div>
           </div>
 
-          <div className="space-y-6">
-            <div className={`border rounded-3xl p-6 shadow-xl h-full transition-all duration-500 backdrop-blur-sm ${darkMode ? 'bg-[#12161f]/90 border-white/5' : 'bg-white/90 border-slate-200'}`}>
-              <h3 className="text-xs font-bold text-slate-400 uppercase mb-5 flex items-center gap-2 tracking-widest"><History size={14} className="text-blue-500"/> Recent Sessions</h3>
-              <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
-                {history.length > 0 ? history.map((h, i) => (
-                  <div key={i} className={`flex justify-between items-center p-3 rounded-xl border transition-all duration-300 ${darkMode ? 'bg-white/[0.02] border-white/5 hover:border-blue-500/30' : 'bg-slate-50 border-slate-200 hover:border-blue-500/30'}`}>
-                    <div className="flex items-center gap-3 truncate">
-                      <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 font-bold text-[8px]">PCAP</div>
-                      <span className="text-[11px] font-bold truncate">{h.name}</span>
-                    </div>
-                    <button onClick={() => handleDownload(h.url, h.name)} className="text-slate-400 hover:text-blue-500 transition-colors">
-                      <Download size={14}/>
-                    </button>
-                  </div>
-                )) : (
-                  <div className="flex flex-col items-center justify-center py-12 opacity-30">
-                     <History size={32} className="mb-2" />
-                     <p className="text-[10px] text-center font-bold uppercase tracking-widest">No Active Sessions</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
         </main>
 
         <footer className={`py-12 border-t mt-auto transition-all duration-500 ${darkMode ? 'border-white/5 bg-[#0b0e14]/50' : 'border-slate-200 bg-slate-100'}`}>
-          <div className="max-w-6xl mx-auto px-6 flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-slate-400">
+          <div className="max-w-4xl mx-auto px-6 flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-slate-400">
             <p>© 2026 ETL CONVERTER</p>
             <div className="flex items-center gap-2">
                 <span className="italic opacity-70">Designed by:</span>
