@@ -18,6 +18,7 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(true);
   const [vdiOnline, setVdiOnline] = useState(false);
 
+  // 🔄 Check active health connection loops to toggle the status indicator dot
   useEffect(() => {
     const checkVDIHealth = async () => {
       try {
@@ -33,6 +34,7 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
+  // 📥 Secure pipeline download method passing the custom browser header
   const handleDownload = async (url, filename) => {
     const loadingToast = toast.loading("Preparing secure download...");
     try {
@@ -96,9 +98,12 @@ export default function App() {
           const statusRes = await axios.get(`${API_BASE_URL}/api/status/${taskId}`, {
             headers: { "ngrok-skip-browser-warning": "69420" }
           });
+          
           if (statusRes.data.progress > progress) setProgress(statusRes.data.progress);
+          
           if (statusRes.data.status === 'completed') {
             clearInterval(interval);
+            // Matches backend static folder setup mapping task metadata
             const fullUrl = `${API_BASE_URL}${statusRes.data.downloadUrl}`;
             setDownloadUrl(fullUrl); setStatus('completed');
             setHistory(prev => [{ id: taskId, name: file.name, size: (file.size / 1024 / 1024).toFixed(2), url: fullUrl }, ...prev]);
@@ -112,7 +117,6 @@ export default function App() {
   return (
     <div className={`min-h-screen transition-colors duration-500 font-sans selection:bg-blue-500/30 relative overflow-x-hidden ${darkMode ? 'bg-[#07090e] text-slate-200' : 'bg-slate-50 text-slate-800'}`}>
       
-      {/* 🌌 Advanced Technical Background Grids & Ambient Glow Layers */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div 
           className="absolute inset-0 opacity-[0.03] transition-opacity duration-500" 
@@ -262,7 +266,6 @@ export default function App() {
 
         <footer className={`py-12 border-t mt-auto transition-all duration-500 ${darkMode ? 'border-white/5 bg-[#0b0e14]/50' : 'border-slate-200 bg-slate-100'}`}>
           <div className="max-w-6xl mx-auto px-6 flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-slate-400">
-            {/* 🎯 UPDATED: Precise corporate title naming rule */}
             <p>© 2026 ETL CONVERTER</p>
             <div className="flex items-center gap-2">
                 <span className="italic opacity-70">Designed by:</span>
