@@ -4,10 +4,10 @@ import axios from 'axios';
 import { Toaster, toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Upload, FileCode, Download, Activity, Zap, History, User, Sun, Moon 
+  Upload, FileCode, Download, Activity, Zap, History, Sun, Moon 
 } from 'lucide-react';
 
-const API_BASE_URL = 'https://secluding-dropout-passion.ngrok-free.dev';
+const API_BASE_URL = 'https://occupancy-saturate-handyman.ngrok-free.dev';
 
 export default function App() {
   const [file, setFile] = useState(null);
@@ -18,7 +18,6 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(true);
   const [vdiOnline, setVdiOnline] = useState(false);
 
-  // ✅ REQUIREMENT: Active VDI Down / Monitoring Polling Loop
   useEffect(() => {
     const checkVDIHealth = async () => {
       try {
@@ -30,7 +29,7 @@ export default function App() {
     };
 
     checkVDIHealth();
-    const interval = setInterval(checkVDIHealth, 5000); // Check engine health every 5s
+    const interval = setInterval(checkVDIHealth, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -52,7 +51,7 @@ export default function App() {
       window.URL.revokeObjectURL(blobUrl);
       toast.success("Download Started", { id: loadingToast });
     } catch (error) {
-      toast.error("Download Failed. File may have expired.", { id: loadingToast });
+      toast.error("Download Failed. File may have expired (1-hour limit).", { id: loadingToast });
     }
   };
 
@@ -72,7 +71,7 @@ export default function App() {
 
   const handleConvert = async () => {
     if (!vdiOnline) {
-      toast.error("Cannot initiate conversion: VDI system is down.");
+      toast.error("Cannot convert: VDI engine is offline.");
       return;
     }
     if (!file) return;
@@ -111,148 +110,167 @@ export default function App() {
   };
 
   return (
-    // ✅ REQUIREMENT: Theme Control Engine Wrapper
-    <div className={`min-h-screen transition-colors duration-300 font-sans selection:bg-blue-500/30 ${darkMode ? 'bg-[#0a0c10] text-slate-200' : 'bg-slate-50 text-slate-800'}`}>
-      <Toaster position="top-right" />
+    <div className={`min-h-screen transition-colors duration-500 font-sans selection:bg-blue-500/30 relative overflow-x-hidden ${darkMode ? 'bg-[#07090e] text-slate-200' : 'bg-slate-50 text-slate-800'}`}>
       
-      <nav className={`border-b p-6 shadow-md sticky top-0 z-50 transition-colors ${darkMode ? 'bg-[#0d1117] border-white/5' : 'bg-white border-slate-200'}`}>
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            {/* ✅ REQUIREMENT: Rename to ETL Converter */}
-            <h1 className={`text-xl font-bold tracking-tight uppercase ${darkMode ? 'text-white' : 'text-slate-900'}`}>
-              ETL Converter
-            </h1>
-          </div>
+      {/* 🌌 Advanced Technical Background Grids & Ambient Glow Layers */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <div 
+          className="absolute inset-0 opacity-[0.03] transition-opacity duration-500" 
+          style={{ 
+            backgroundImage: `radial-gradient(${darkMode ? '#ffffff' : '#000000'} 1px, transparent 1px)`, 
+            backgroundSize: '24px 24px' 
+          }} 
+        />
+        <div 
+          className="absolute inset-0 transition-opacity duration-500" 
+          style={{ 
+            backgroundImage: `linear-gradient(${darkMode ? 'rgba(255,255,255,0.01)' : 'rgba(0,0,0,0.015)'} 1px, transparent 1px), linear-gradient(90deg, ${darkMode ? 'rgba(255,255,255,0.01)' : 'rgba(0,0,0,0.015)'} 1px, transparent 1px)`, 
+            backgroundSize: '120px 120px' 
+          }} 
+        />
+        <div className={`absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full blur-[120px] mix-blend-screen transition-all duration-500 ${darkMode ? 'bg-blue-950/20' : 'bg-blue-200/20'}`} />
+        <div className={`absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full blur-[120px] mix-blend-screen transition-all duration-500 ${darkMode ? 'bg-indigo-950/15' : 'bg-indigo-200/15'}`} />
+      </div>
 
-          <div className="flex items-center gap-6">
-            {/* ✅ REQUIREMENT: Light/Dark Mode Switch UI */}
-            <button 
-              onClick={() => setDarkMode(!darkMode)} 
-              className={`p-2 rounded-xl border transition-all ${darkMode ? 'border-white/10 bg-white/5 text-yellow-400 hover:bg-white/10' : 'border-slate-200 bg-slate-100 text-indigo-600 hover:bg-slate-200'}`}
-            >
-              {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
-
-            {/* ✅ REQUIREMENT: VDI Down Status indicator mapping a plain dot UI */}
-            <div className="flex items-center gap-2">
-              <div className={`w-3 h-3 rounded-full ${vdiOnline ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
-              <span className={`text-xs font-bold uppercase tracking-wider ${vdiOnline ? 'text-green-500' : 'text-red-500'}`}>
-                {vdiOnline ? 'VDI Online' : 'VDI Down'}
-              </span>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <main className="max-w-6xl mx-auto px-6 py-12 grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
-          <div className={`border rounded-3xl p-8 shadow-xl transition-colors ${darkMode ? 'bg-[#161b22] border-white/5' : 'bg-white border-slate-200'}`}>
-            <h2 className={`text-2xl font-bold mb-6 flex items-center gap-3 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
-              <Zap className="text-blue-500 w-5 h-5" /> PCAP Reconstruction
-            </h2>
-            
-            <div {...getRootProps()} className={`group border-2 border-dashed rounded-2xl p-16 text-center cursor-pointer transition-all duration-300 ${isDragActive ? 'border-blue-500 bg-blue-500/5' : darkMode ? 'border-slate-800 hover:border-blue-500/40 hover:bg-white/[0.01]' : 'border-slate-300 hover:border-blue-500/40 hover:bg-slate-50'}`}>
-              <input {...getInputProps()} />
-              <Upload className="w-12 h-12 mx-auto mb-4 text-slate-400 group-hover:text-blue-500 transition-colors" />
-              <p className="text-lg">Drop ETL trace or <span className="text-blue-500 font-semibold">browse files</span></p>
-              <p className="text-xs text-slate-400 mt-2 font-mono uppercase tracking-tighter">Automated Clean Room Environment • Active Retention Lifecycle: 1 Hour</p>
+      <div className="relative z-10 min-h-screen flex flex-col">
+        <Toaster position="top-right" />
+        
+        <nav className={`border-b p-6 shadow-sm sticky top-0 backdrop-blur-md z-50 transition-colors duration-500 ${darkMode ? 'bg-[#0d1117]/80 border-white/5' : 'bg-white/80 border-slate-200'}`}>
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <div className="flex items-center gap-4">
+              <h1 className={`text-xl font-bold tracking-tight uppercase ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                ETL Converter
+              </h1>
             </div>
 
-            <AnimatePresence>
-              {file && (
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-8">
-                  <div className={`p-5 rounded-2xl flex justify-between items-center border ${darkMode ? 'bg-black/30 border-white/5' : 'bg-slate-100 border-slate-200'}`}>
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 bg-blue-500/10 rounded-xl"><FileCode className="text-blue-400 w-5 h-5" /></div>
-                      <div>
-                        <p className={`text-sm font-bold truncate max-w-[250px] ${darkMode ? 'text-white' : 'text-slate-900'}`}>{file.name}</p>
-                        <p className="text-[10px] text-slate-400">{(file.size / 1024).toFixed(1)} KB</p>
+            <div className="flex items-center gap-6">
+              <button 
+                onClick={() => setDarkMode(!darkMode)} 
+                className={`p-2 rounded-xl border transition-all duration-300 ${darkMode ? 'border-white/10 bg-white/5 text-yellow-400 hover:bg-white/10' : 'border-slate-200 bg-slate-100 text-indigo-600 hover:bg-slate-200'}`}
+              >
+                {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+              </button>
+
+              <div className="flex items-center gap-2">
+                <div className={`w-3 h-3 rounded-full transition-all duration-300 ${vdiOnline ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
+                <span className={`text-xs font-bold uppercase tracking-wider transition-colors duration-300 ${vdiOnline ? 'text-green-500' : 'text-red-500'}`}>
+                  {vdiOnline ? 'VDI Online' : 'VDI Down'}
+                </span>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <main className="max-w-6xl mx-auto px-6 py-12 grid lg:grid-cols-3 gap-8 flex-grow w-full">
+          <div className="lg:col-span-2">
+            <div className={`border rounded-3xl p-8 shadow-xl transition-all duration-500 backdrop-blur-sm ${darkMode ? 'bg-[#12161f]/90 border-white/5' : 'bg-white/90 border-slate-200'}`}>
+              <h2 className={`text-2xl font-bold mb-6 flex items-center gap-3 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
+                <Zap className="text-blue-500 w-5 h-5" /> PCAP Reconstruction
+              </h2>
+              
+              <div {...getRootProps()} className={`group border-2 border-dashed rounded-2xl p-16 text-center cursor-pointer transition-all duration-300 ${isDragActive ? 'border-blue-500 bg-blue-500/5' : darkMode ? 'border-slate-800 hover:border-blue-500/40 hover:bg-white/[0.01]' : 'border-slate-300 hover:border-blue-500/40 hover:bg-slate-50'}`}>
+                <input {...getInputProps()} />
+                <Upload className="w-12 h-12 mx-auto mb-4 text-slate-400 group-hover:text-blue-500 transition-colors duration-300" />
+                <p className="text-lg">Drop ETL trace or <span className="text-blue-500 font-semibold">browse files</span></p>
+                <p className="text-xs text-slate-400 mt-2 font-mono uppercase tracking-tighter">Automated Clean Room Environment • Active Retention Lifecycle: 1 Hour</p>
+              </div>
+
+              <AnimatePresence>
+                {file && (
+                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-8">
+                    <div className={`p-5 rounded-2xl flex justify-between items-center border transition-colors duration-500 ${darkMode ? 'bg-black/30 border-white/5' : 'bg-slate-100 border-slate-200'}`}>
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 bg-blue-500/10 rounded-xl"><FileCode className="text-blue-400 w-5 h-5" /></div>
+                        <div>
+                          <p className={`text-sm font-bold truncate max-w-[250px] ${darkMode ? 'text-white' : 'text-slate-900'}`}>{file.name}</p>
+                          <p className="text-[10px] text-slate-400">{(file.size / 1024).toFixed(1)} KB</p>
+                        </div>
                       </div>
+                      {status === 'idle' ? (
+                        <button 
+                          onClick={handleConvert} 
+                          disabled={!vdiOnline}
+                          className={`px-8 py-3 rounded-xl font-bold text-sm shadow-lg transition-all active:scale-95 ${!vdiOnline ? 'bg-slate-400 cursor-not-allowed text-slate-100 shadow-none' : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/20'}`}
+                        >
+                          INITIATE CONVERSION
+                        </button>
+                      ) : (
+                        <div className="flex items-center gap-2 text-blue-500 font-bold text-sm uppercase italic">
+                          <Activity className="w-4 h-4 animate-spin" /> {status}...
+                        </div>
+                      )}
                     </div>
-                    {status === 'idle' ? (
-                      <button 
-                        onClick={handleConvert} 
-                        disabled={!vdiOnline}
-                        className={`px-8 py-3 rounded-xl font-bold text-sm shadow-lg transition-all active:scale-95 ${!vdiOnline ? 'bg-slate-400 cursor-not-allowed text-white shadow-none' : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/20'}`}
-                      >
-                        INITIATE CONVERSION
-                      </button>
-                    ) : (
-                      <div className="flex items-center gap-2 text-blue-500 font-bold text-sm uppercase italic">
-                        <Activity className="w-4 h-4 animate-spin" /> {status}...
+                    {status !== 'idle' && (
+                      <div className="mt-6 px-1">
+                        <div className="flex justify-between text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-widest">
+                          <span>Optimizing Packet Headers</span>
+                          <span>{progress}%</span>
+                        </div>
+                        <div className={`h-1.5 w-full rounded-full overflow-hidden transition-colors duration-500 ${darkMode ? 'bg-slate-800' : 'bg-slate-200'}`}>
+                          <div className="h-full bg-gradient-to-r from-blue-600 to-indigo-500 transition-all duration-500" style={{ width: `${progress}%` }} />
+                        </div>
                       </div>
                     )}
-                  </div>
-                  {status !== 'idle' && (
-                    <div className="mt-6 px-1">
-                      <div className="flex justify-between text-[10px] font-bold text-slate-400 mb-2 uppercase tracking-widest">
-                        <span>Optimizing Packet Headers</span>
-                        <span>{progress}%</span>
-                      </div>
-                      <div className={`h-1.5 w-full rounded-full overflow-hidden ${darkMode ? 'bg-slate-800' : 'bg-slate-200'}`}>
-                        <div className="h-full bg-gradient-to-r from-blue-600 to-indigo-500 transition-all duration-500" style={{ width: `${progress}%` }} />
-                      </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {status === 'completed' && (
+                <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className={`mt-6 p-6 border rounded-2xl flex justify-between items-center transition-colors duration-500 ${darkMode ? 'bg-green-500/5 border-green-500/20' : 'bg-green-50/50 border-green-200'}`}>
+                  <div className="flex items-center gap-3 text-green-600">
+                    <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center font-bold text-lg">✓</div>
+                    <div>
+                      <p className="font-bold text-sm">Processing Complete</p>
+                      <p className="text-[10px] opacity-70 italic font-mono uppercase">VDI Storage Lifecycle Flagged: Purge scheduled in 1 Hour</p>
                     </div>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {status === 'completed' && (
-              <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className={`mt-6 p-6 border rounded-2xl flex justify-between items-center ${darkMode ? 'bg-green-500/5 border-green-500/20' : 'bg-green-50/50 border-green-200'}`}>
-                <div className="flex items-center gap-3 text-green-600">
-                  <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center font-bold text-lg">✓</div>
-                  <div>
-                    <p className="font-bold text-sm">Processing Complete</p>
-                    <p className="text-[10px] opacity-70 italic font-mono uppercase">VDI Storage Lifecycle Flagged: Purge scheduled in 1 Hour</p>
                   </div>
-                </div>
-                <button 
-                  onClick={() => handleDownload(downloadUrl, file.name)}
-                  className="bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded-xl font-bold text-sm transition-colors shadow-lg shadow-green-600/20 active:scale-95"
-                >
-                  DOWNLOAD PCAP
-                </button>
-              </motion.div>
-            )}
-          </div>
-        </div>
-
-        <div className="space-y-6">
-          <div className={`border rounded-3xl p-6 shadow-xl h-full transition-colors ${darkMode ? 'bg-[#161b22] border-white/5' : 'bg-white border-slate-200'}`}>
-            <h3 className="text-xs font-bold text-slate-400 uppercase mb-5 flex items-center gap-2 tracking-widest"><History size={14} className="text-blue-500"/> Recent Sessions</h3>
-            <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
-              {history.length > 0 ? history.map((h, i) => (
-                <div key={i} className={`flex justify-between items-center p-3 rounded-xl border transition-all ${darkMode ? 'bg-white/[0.02] border-white/5 hover:border-blue-500/30' : 'bg-slate-50 border-slate-200 hover:border-blue-500/30'}`}>
-                  <div className="flex items-center gap-3 truncate">
-                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 font-bold text-[8px]">PCAP</div>
-                    <span className="text-[11px] font-bold truncate">{h.name}</span>
-                  </div>
-                  <button onClick={() => handleDownload(h.url, h.name)} className="text-slate-400 hover:text-blue-500 transition-colors">
-                    <Download size={14}/>
+                  <button 
+                    onClick={() => handleDownload(downloadUrl, file.name)}
+                    className="bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded-xl font-bold text-sm transition-colors shadow-lg shadow-green-600/20 active:scale-95"
+                  >
+                    DOWNLOAD PCAP
                   </button>
-                </div>
-              )) : (
-                <div className="flex flex-col items-center justify-center py-12 opacity-30">
-                   <History size={32} className="mb-2" />
-                   <p className="text-[10px] text-center font-bold uppercase tracking-widest">No Active Sessions</p>
-                </div>
+                </motion.div>
               )}
             </div>
           </div>
-        </div>
-      </main>
 
-      {/* ✅ REQUIREMENT: Unified Footer containing exactly one instance of Sahil Amin credits */}
-      <footer className={`py-12 border-t mt-auto transition-colors ${darkMode ? 'border-white/5 bg-[#0d1117]/50' : 'border-slate-200 bg-slate-100'}`}>
-        <div className="max-w-6xl mx-auto px-6 flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-slate-400">
-          <p>© 2026 ETL CONVERTER PIPELINE</p>
-          <div className="flex items-center gap-2">
-              <span className="italic opacity-70">Designed by:</span>
-              <span className="text-blue-500 tracking-widest">Sahil Amin</span>
+          <div className="space-y-6">
+            <div className={`border rounded-3xl p-6 shadow-xl h-full transition-all duration-500 backdrop-blur-sm ${darkMode ? 'bg-[#12161f]/90 border-white/5' : 'bg-white/90 border-slate-200'}`}>
+              <h3 className="text-xs font-bold text-slate-400 uppercase mb-5 flex items-center gap-2 tracking-widest"><History size={14} className="text-blue-500"/> Recent Sessions</h3>
+              <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
+                {history.length > 0 ? history.map((h, i) => (
+                  <div key={i} className={`flex justify-between items-center p-3 rounded-xl border transition-all duration-300 ${darkMode ? 'bg-white/[0.02] border-white/5 hover:border-blue-500/30' : 'bg-slate-50 border-slate-200 hover:border-blue-500/30'}`}>
+                    <div className="flex items-center gap-3 truncate">
+                      <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 font-bold text-[8px]">PCAP</div>
+                      <span className="text-[11px] font-bold truncate">{h.name}</span>
+                    </div>
+                    <button onClick={() => handleDownload(h.url, h.name)} className="text-slate-400 hover:text-blue-500 transition-colors">
+                      <Download size={14}/>
+                    </button>
+                  </div>
+                )) : (
+                  <div className="flex flex-col items-center justify-center py-12 opacity-30">
+                     <History size={32} className="mb-2" />
+                     <p className="text-[10px] text-center font-bold uppercase tracking-widest">No Active Sessions</p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      </footer>
+        </main>
+
+        <footer className={`py-12 border-t mt-auto transition-all duration-500 ${darkMode ? 'border-white/5 bg-[#0b0e14]/50' : 'border-slate-200 bg-slate-100'}`}>
+          <div className="max-w-6xl mx-auto px-6 flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-slate-400">
+            {/* 🎯 UPDATED: Precise corporate title naming rule */}
+            <p>© 2026 ETL CONVERTER</p>
+            <div className="flex items-center gap-2">
+                <span className="italic opacity-70">Designed by:</span>
+                <span className="text-blue-500 tracking-widest">Sahil Amin</span>
+            </div>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }
