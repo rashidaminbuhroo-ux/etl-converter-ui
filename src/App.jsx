@@ -18,11 +18,14 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(true);
   const [vdiOnline, setVdiOnline] = useState(false);
 
-  // 🔄 Check active health connection loops to toggle the status indicator dot
+  // 🔄 Background connection loop with bypass header added to unblock the red indicator
   useEffect(() => {
     const checkVDIHealth = async () => {
       try {
-        const res = await axios.get(`${API_BASE_URL}/api/health`, { timeout: 3000 });
+        const res = await axios.get(`${API_BASE_URL}/api/health`, { 
+          headers: { "ngrok-skip-browser-warning": "69420" },
+          timeout: 3000 
+        });
         if (res.data.status === 'online') setVdiOnline(true);
       } catch (e) {
         setVdiOnline(false);
@@ -103,7 +106,6 @@ export default function App() {
           
           if (statusRes.data.status === 'completed') {
             clearInterval(interval);
-            // Matches backend static folder setup mapping task metadata
             const fullUrl = `${API_BASE_URL}${statusRes.data.downloadUrl}`;
             setDownloadUrl(fullUrl); setStatus('completed');
             setHistory(prev => [{ id: taskId, name: file.name, size: (file.size / 1024 / 1024).toFixed(2), url: fullUrl }, ...prev]);
