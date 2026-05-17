@@ -166,12 +166,12 @@ export default function App() {
           </div>
         </nav>
 
-        {/* 🎛️ RESTORED: Advanced Two-Column Main Workspace Grid (lg:grid-cols-3) */}
-        <main className="max-w-6xl mx-auto px-6 py-12 grid lg:grid-cols-3 gap-8 flex-grow w-full">
+        {/* Advanced Two-Column Main Workspace Grid (lg:grid-cols-3) */}
+        <main className="max-w-6xl mx-auto px-6 py-12 grid lg:grid-cols-3 gap-8 flex-grow w-full items-start">
           
           {/* LEFT AREA: Workspace Workspace Panel spans 2 Columns (lg:col-span-2) */}
           <div className="lg:col-span-2 space-y-6">
-            <div className={`border rounded-3xl p-8 shadow-xl transition-all duration-500 backdrop-blur-sm h-full ${darkMode ? 'bg-[#12161f]/90 border-white/5' : 'bg-white/90 border-slate-200'}`}>
+            <div className={`border rounded-3xl p-8 shadow-xl transition-all duration-500 backdrop-blur-sm ${darkMode ? 'bg-[#12161f]/90 border-white/5' : 'bg-white/90 border-slate-200'}`}>
               <h2 className={`text-2xl font-bold mb-6 flex items-center gap-3 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                 <Zap className="text-blue-500 w-5 h-5" /> PCAP Reconstruction
               </h2>
@@ -192,7 +192,7 @@ export default function App() {
                 </div>
               </div>
               
-              {/* Clean Upload Dropzone Area — Metadata label completely removed */}
+              {/* Clean Upload Dropzone Area */}
               <div {...getRootProps()} className={`group border-2 border-dashed rounded-2xl p-16 text-center cursor-pointer transition-all duration-300 ${isDragActive ? 'border-blue-500 bg-blue-500/5' : darkMode ? 'border-slate-800 hover:border-blue-500/40 hover:bg-white/[0.01]' : 'border-slate-300 hover:border-blue-500/40 hover:bg-slate-50'}`}>
                 <input {...getInputProps()} />
                 <Upload className="w-12 h-12 mx-auto mb-4 text-slate-400 group-hover:text-blue-500 transition-colors duration-300" />
@@ -259,13 +259,14 @@ export default function App() {
             </div>
           </div>
 
-          {/* RIGHT AREA: Dedicated Sidebar for Recent Sessions audits (1 Column) */}
-          <div className="space-y-6">
-            <div className={`border rounded-3xl p-6 shadow-xl h-full transition-all duration-500 backdrop-blur-sm ${darkMode ? 'bg-[#12161f]/90 border-white/5' : 'bg-white/90 border-slate-200'}`}>
+          {/* RIGHT AREA: Dedicated Compact Sidebar for Recent Sessions (1 Column) */}
+          <div className="lg:col-span-1">
+            <div className={`border rounded-3xl p-6 shadow-xl transition-all duration-500 backdrop-blur-sm ${darkMode ? 'bg-[#12161f]/90 border-white/5' : 'bg-white/90 border-slate-200'}`}>
               <h3 className="text-xs font-bold text-slate-400 uppercase mb-5 flex items-center gap-2 tracking-widest">
                 <History size={14} className="text-blue-500"/> Recent Sessions
               </h3>
-              <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
+              {/* ✨ MODIFIED: Added custom compact max-height boundaries to match design preview */}
+              <div className="space-y-3 max-h-[340px] overflow-y-auto pr-2 custom-scrollbar">
                 {history.length > 0 ? history.map((h, i) => (
                   <div key={i} className={`flex justify-between items-center p-3 rounded-xl border transition-all duration-300 ${darkMode ? 'bg-white/[0.02] border-white/5 hover:border-blue-500/30' : 'bg-slate-50 border-slate-200 hover:border-blue-500/30'}`}>
                     <div className="flex items-center gap-3 truncate">
@@ -277,7 +278,7 @@ export default function App() {
                     </button>
                   </div>
                 )) : (
-                  <div className="flex flex-col items-center justify-center py-12 opacity-30">
+                  <div className="flex flex-col items-center justify-center py-16 opacity-30">
                      <History size={32} className="mb-2" />
                      <p className="text-[10px] text-center font-bold uppercase tracking-widest">No Active Sessions</p>
                   </div>
