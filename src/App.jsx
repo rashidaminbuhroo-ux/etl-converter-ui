@@ -7,7 +7,7 @@ import {
   Upload, FileCode, Activity, Zap, Sun, Moon, ShieldCheck, Cpu, FolderHeart, History, Download 
 } from 'lucide-react';
 
-// 🌐 Your permanent, free LocalTunnel subdomain link mapped to your Windows background service
+// 🌐 Forcing HTTPS endpoint to prevent modern browser Mixed Content blocks on GitHub Pages!
 const API_BASE_URL = 'https://sahil-vdi-pipeline.localtunnel.me';
 
 export default function App() {
