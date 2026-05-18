@@ -253,18 +253,19 @@ export default function App() {
                 <History size={14} className="text-blue-500"/> Recent Sessions
               </h3>
               <div className="space-y-3 max-h-[340px] overflow-y-auto pr-2">
-                {history.length > 0 ? history.map((h, i) => (
-                  <div key={i} className={`flex justify-between items-center p-3 rounded-xl border transition-all duration-300 ${darkMode ? 'bg-white/[0.02] border-white/5 hover:border-blue-500/30' : 'bg-slate-50 border-slate-200 hover:border-blue-500/30'}`}>
-                    <div className="flex items-center gap-3 truncate">
-                      <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 font-bold text-[8px] shrink-0">PCAP</div>
-                      <span className="text-[11px] font-bold truncate">{h.name}</span>
+                {history.length > 0 ? (
+                  history.map((h, i) => (
+                    <div key={i} className={`flex justify-between items-center p-3 rounded-xl border transition-all duration-300 ${darkMode ? 'bg-white/[0.02] border-white/5 hover:border-blue-500/30' : 'bg-slate-50 border-slate-200 hover:border-blue-500/30'}`}>
+                      <div className="flex items-center gap-3 truncate">
+                        <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 font-bold text-[8px] shrink-0">PCAP</div>
+                        <span className="text-[11px] font-bold truncate">{h.name}</span>
+                      </div>
+                      <button onClick={() => handleDownload(h.url, h.name)} className="text-slate-400 hover:text-blue-500 transition-colors pl-2 shrink-0">
+                        <Download size={14}/>
+                      </button>
                     </div>
-                    <button onClick={() => handleDownload(h.url, h.name)} className="text-slate-400 hover:text-blue-500 transition-colors pl-2 shrink-0">
-                      <Download size={14}/>
-                    </button>
-                  </div>
-                ))}
-                {history.length === 0 && (
+                  ))
+                ) : (
                   <div className="flex flex-col items-center justify-center py-16 opacity-30">
                      <History size={32} className="mb-2" />
                      <p className="text-[10px] text-center font-bold uppercase tracking-widest">No Active Sessions</p>
