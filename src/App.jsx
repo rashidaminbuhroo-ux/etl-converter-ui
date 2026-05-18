@@ -7,8 +7,7 @@ import {
   Upload, FileCode, Activity, Zap, Sun, Moon, ShieldCheck, Cpu, FolderHeart, History, Download 
 } from 'lucide-react';
 
-// 🌐 Your live, completely unblocked, zero-popup active Serveo tunnel link fetched from PM2!
-const API_BASE_URL = 'https://b54435068b2a6063-13-71-33-59.serveousercontent.com';
+const API_BASE_URL = 'https://occupancy-saturate-handyman.ngrok-free.dev';
 
 export default function App() {
   const [file, setFile] = useState(null);
@@ -22,7 +21,10 @@ export default function App() {
   useEffect(() => {
     const checkVDIHealth = async () => {
       try {
-        const res = await axios.get(`${API_BASE_URL}/api/health`, { timeout: 3000 });
+        const res = await axios.get(`${API_BASE_URL}/api/health`, { 
+          headers: { "ngrok-skip-browser-warning": "69420" },
+          timeout: 3000 
+        });
         if (res.data.status === 'online') setVdiOnline(true);
       } catch (e) {
         setVdiOnline(false);
@@ -37,7 +39,10 @@ export default function App() {
   const handleDownload = async (url, filename) => {
     const loadingToast = toast.loading("Preparing secure download...");
     try {
-      const response = await axios.get(url, { responseType: 'blob' });
+      const response = await axios.get(url, {
+        headers: { "ngrok-skip-browser-warning": "69420" },
+        responseType: 'blob',
+      });
       const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = blobUrl;
@@ -79,7 +84,10 @@ export default function App() {
     
     try {
       const res = await axios.post(`${API_BASE_URL}/api/convert`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { 
+          "ngrok-skip-browser-warning": "69420",
+          "Content-Type": "multipart/form-data"
+        },
         timeout: 0 
       });
       
@@ -88,7 +96,9 @@ export default function App() {
 
       const interval = setInterval(async () => {
         try {
-          const statusRes = await axios.get(`${API_BASE_URL}/api/status/${taskId}`);
+          const statusRes = await axios.get(`${API_BASE_URL}/api/status/${taskId}`, {
+            headers: { "ngrok-skip-browser-warning": "69420" }
+          });
           
           if (statusRes.data.progress > progress) setProgress(statusRes.data.progress);
           
@@ -107,6 +117,7 @@ export default function App() {
   return (
     <div className={`min-h-screen transition-colors duration-500 font-sans selection:bg-blue-500/30 relative overflow-x-hidden ${darkMode ? 'bg-[#07090e] text-slate-200' : 'bg-slate-50 text-slate-800'}`}>
       
+      {/* Background Tech Grids & Ambient Glow Layers */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div 
           className="absolute inset-0 opacity-[0.03] transition-opacity duration-500" 
@@ -155,23 +166,24 @@ export default function App() {
           </div>
         </nav>
 
+        {/* Advanced Two-Column Main Workspace Grid (lg:grid-cols-3) */}
         <main className="max-w-6xl mx-auto px-6 py-12 grid lg:grid-cols-3 gap-8 flex-grow w-full items-start">
           
-          {/* LEFT SIDE PANEL Workspace Container */}
+          {/* LEFT AREA: Workspace Workspace Panel spans 2 Columns (lg:col-span-2) */}
           <div className="lg:col-span-2 space-y-6">
             <div className={`border rounded-3xl p-8 shadow-xl transition-all duration-500 backdrop-blur-sm ${darkMode ? 'bg-[#12161f]/90 border-white/5' : 'bg-white/90 border-slate-200'}`}>
               <h2 className={`text-2xl font-bold mb-6 flex items-center gap-3 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                 <Zap className="text-blue-500 w-5 h-5" /> PCAP Reconstruction
               </h2>
 
-              {/* 💡 SIMPLE "HOW IT WORKS" CORE STEPPERS */}
+              {/* 💡 SIMPLIFIED "HOW IT WORKS" CORE PROCESS */}
               <div className="grid md:grid-cols-3 gap-4 mb-8">
                 <div className={`p-4 rounded-xl border space-y-1 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50 border-slate-200/60'}`}>
                   <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest flex items-center gap-1.5"><ShieldCheck size={12}/> 1. Upload</span>
                   <p className="text-[11px] leading-relaxed opacity-70">Pass .ETL files over an encrypted tunnel gateway bridge.</p>
                 </div>
                 <div className={`p-4 rounded-xl border space-y-1 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50 border-slate-200/60'}`}>
-                  <span className="text-[10px] font-bold text-blue-500 uppercase tracking-wider flex items-center gap-1.5"><Cpu size={12}/> 2. Convert</span>
+                  <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest flex items-center gap-1.5"><Cpu size={12}/> 2. Convert</span>
                   <p className="text-[11px] leading-relaxed opacity-70">VDI background processing runs native trace compilation.</p>
                 </div>
                 <div className={`p-4 rounded-xl border space-y-1 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50 border-slate-200/60'}`}>
@@ -180,6 +192,7 @@ export default function App() {
                 </div>
               </div>
               
+              {/* Clean Upload Dropzone Area */}
               <div {...getRootProps()} className={`group border-2 border-dashed rounded-2xl p-16 text-center cursor-pointer transition-all duration-300 ${isDragActive ? 'border-blue-500 bg-blue-500/5' : darkMode ? 'border-slate-800 hover:border-blue-500/40 hover:bg-white/[0.01]' : 'border-slate-300 hover:border-blue-500/40 hover:bg-slate-50'}`}>
                 <input {...getInputProps()} />
                 <Upload className="w-12 h-12 mx-auto mb-4 text-slate-400 group-hover:text-blue-500 transition-colors duration-300" />
@@ -246,26 +259,25 @@ export default function App() {
             </div>
           </div>
 
-          {/* RIGHT SIDE COMPACT AUDIT SIDEBAR */}
+          {/* RIGHT AREA: Dedicated Compact Sidebar for Recent Sessions (1 Column) */}
           <div className="lg:col-span-1">
             <div className={`border rounded-3xl p-6 shadow-xl transition-all duration-500 backdrop-blur-sm ${darkMode ? 'bg-[#12161f]/90 border-white/5' : 'bg-white/90 border-slate-200'}`}>
               <h3 className="text-xs font-bold text-slate-400 uppercase mb-5 flex items-center gap-2 tracking-widest">
                 <History size={14} className="text-blue-500"/> Recent Sessions
               </h3>
-              <div className="space-y-3 max-h-[340px] overflow-y-auto pr-2">
-                {history.length > 0 ? (
-                  history.map((h, i) => (
-                    <div key={i} className={`flex justify-between items-center p-3 rounded-xl border transition-all duration-300 ${darkMode ? 'bg-white/[0.02] border-white/5 hover:border-blue-500/30' : 'bg-slate-50 border-slate-200 hover:border-blue-500/30'}`}>
-                      <div className="flex items-center gap-3 truncate">
-                        <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 font-bold text-[8px] shrink-0">PCAP</div>
-                        <span className="text-[11px] font-bold truncate">{h.name}</span>
-                      </div>
-                      <button onClick={() => handleDownload(h.url, h.name)} className="text-slate-400 hover:text-blue-500 transition-colors pl-2 shrink-0">
-                        <Download size={14}/>
-                      </button>
+              {/* ✨ MODIFIED: Added custom compact max-height boundaries to match design preview */}
+              <div className="space-y-3 max-h-[340px] overflow-y-auto pr-2 custom-scrollbar">
+                {history.length > 0 ? history.map((h, i) => (
+                  <div key={i} className={`flex justify-between items-center p-3 rounded-xl border transition-all duration-300 ${darkMode ? 'bg-white/[0.02] border-white/5 hover:border-blue-500/30' : 'bg-slate-50 border-slate-200 hover:border-blue-500/30'}`}>
+                    <div className="flex items-center gap-3 truncate">
+                      <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-500 font-bold text-[8px] shrink-0">PCAP</div>
+                      <span className="text-[11px] font-bold truncate">{h.name}</span>
                     </div>
-                  ))
-                ) : (
+                    <button onClick={() => handleDownload(h.url, h.name)} className="text-slate-400 hover:text-blue-500 transition-colors pl-2 shrink-0">
+                      <Download size={14}/>
+                    </button>
+                  </div>
+                )) : (
                   <div className="flex flex-col items-center justify-center py-16 opacity-30">
                      <History size={32} className="mb-2" />
                      <p className="text-[10px] text-center font-bold uppercase tracking-widest">No Active Sessions</p>
