@@ -7,8 +7,15 @@ import {
   Upload, FileCode, Activity, Zap, Sun, Moon, ShieldCheck, Cpu, FolderHeart, History, Download 
 } from 'lucide-react';
 
-// 🌐 Forcing HTTPS endpoint to prevent modern browser Mixed Content blocks on GitHub Pages!
+// 🌐 Your permanent, free LocalTunnel subdomain link mapped to your Windows background service
 const API_BASE_URL = 'https://sahil-vdi-pipeline.localtunnel.me';
+
+// 🔒 Universal headers configuration to automatically bypass the LocalTunnel landing page prompt
+const axiosConfig = {
+  headers: {
+    'Bypass-Tunnel-Reminder': 'true'
+  }
+};
 
 export default function App() {
   const [file, setFile] = useState(null);
@@ -22,7 +29,11 @@ export default function App() {
   useEffect(() => {
     const checkVDIHealth = async () => {
       try {
-        const res = await axios.get(`${API_BASE_URL}/api/health`, { timeout: 3000 });
+        // 🚀 Bypassing the security prompt programmatically via configured header settings
+        const res = await axios.get(`${API_BASE_URL}/api/health`, { 
+          ...axiosConfig,
+          timeout: 3000 
+        });
         if (res.data.status === 'online') setVdiOnline(true);
       } catch (e) {
         setVdiOnline(false);
@@ -37,7 +48,10 @@ export default function App() {
   const handleDownload = async (url, filename) => {
     const loadingToast = toast.loading("Preparing secure download...");
     try {
-      const response = await axios.get(url, { responseType: 'blob' });
+      const response = await axios.get(url, { 
+        ...axiosConfig,
+        responseType: 'blob' 
+      });
       const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = blobUrl;
@@ -79,7 +93,10 @@ export default function App() {
     
     try {
       const res = await axios.post(`${API_BASE_URL}/api/convert`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { 
+          ...axiosConfig.headers,
+          "Content-Type": "multipart/form-data" 
+        },
         timeout: 0 
       });
       
@@ -88,7 +105,7 @@ export default function App() {
 
       const interval = setInterval(async () => {
         try {
-          const statusRes = await axios.get(`${API_BASE_URL}/api/status/${taskId}`);
+          const statusRes = await axios.get(`${API_BASE_URL}/api/status/${taskId}`, axiosConfig);
           
           if (statusRes.data.progress > progress) setProgress(statusRes.data.progress);
           
