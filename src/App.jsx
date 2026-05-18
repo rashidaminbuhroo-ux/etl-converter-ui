@@ -7,15 +7,8 @@ import {
   Upload, FileCode, Activity, Zap, Sun, Moon, ShieldCheck, Cpu, FolderHeart, History, Download 
 } from 'lucide-react';
 
-// 🌐 Your permanent, free LocalTunnel subdomain link mapped to your Windows background service
-const API_BASE_URL = 'https://sahil-vdi-pipeline.localtunnel.me';
-
-// 🔒 Universal headers configuration to automatically bypass the LocalTunnel landing page prompt
-const axiosConfig = {
-  headers: {
-    'Bypass-Tunnel-Reminder': 'true'
-  }
-};
+// 🌐 Your live, completely unblocked, zero-popup active Serveo tunnel link fetched from PM2!
+const API_BASE_URL = 'https://b54435068b2a6063-13-71-33-59.serveousercontent.com';
 
 export default function App() {
   const [file, setFile] = useState(null);
@@ -29,11 +22,7 @@ export default function App() {
   useEffect(() => {
     const checkVDIHealth = async () => {
       try {
-        // 🚀 Bypassing the security prompt programmatically via configured header settings
-        const res = await axios.get(`${API_BASE_URL}/api/health`, { 
-          ...axiosConfig,
-          timeout: 3000 
-        });
+        const res = await axios.get(`${API_BASE_URL}/api/health`, { timeout: 3000 });
         if (res.data.status === 'online') setVdiOnline(true);
       } catch (e) {
         setVdiOnline(false);
@@ -48,10 +37,7 @@ export default function App() {
   const handleDownload = async (url, filename) => {
     const loadingToast = toast.loading("Preparing secure download...");
     try {
-      const response = await axios.get(url, { 
-        ...axiosConfig,
-        responseType: 'blob' 
-      });
+      const response = await axios.get(url, { responseType: 'blob' });
       const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = blobUrl;
@@ -93,10 +79,7 @@ export default function App() {
     
     try {
       const res = await axios.post(`${API_BASE_URL}/api/convert`, formData, {
-        headers: { 
-          ...axiosConfig.headers,
-          "Content-Type": "multipart/form-data" 
-        },
+        headers: { "Content-Type": "multipart/form-data" },
         timeout: 0 
       });
       
@@ -105,7 +88,7 @@ export default function App() {
 
       const interval = setInterval(async () => {
         try {
-          const statusRes = await axios.get(`${API_BASE_URL}/api/status/${taskId}`, axiosConfig);
+          const statusRes = await axios.get(`${API_BASE_URL}/api/status/${taskId}`);
           
           if (statusRes.data.progress > progress) setProgress(statusRes.data.progress);
           
@@ -188,7 +171,7 @@ export default function App() {
                   <p className="text-[11px] leading-relaxed opacity-70">Pass .ETL files over an encrypted tunnel gateway bridge.</p>
                 </div>
                 <div className={`p-4 rounded-xl border space-y-1 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50 border-slate-200/60'}`}>
-                  <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest flex items-center gap-1.5"><Cpu size={12}/> 2. Convert</span>
+                  <span className="text-[10px] font-bold text-blue-500 uppercase tracking-wider flex items-center gap-1.5"><Cpu size={12}/> 2. Convert</span>
                   <p className="text-[11px] leading-relaxed opacity-70">VDI background processing runs native trace compilation.</p>
                 </div>
                 <div className={`p-4 rounded-xl border space-y-1 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50 border-slate-200/60'}`}>
