@@ -7,8 +7,15 @@ import {
   Upload, FileCode, Activity, Zap, Sun, Moon, ShieldCheck, Cpu, FolderHeart, History, Download 
 } from 'lucide-react';
 
+// 🌐 Your active, live Ngrok forwarding link address!
 const API_BASE_URL = 'https://coerce-backshift-daunting.ngrok-free.dev';
 
+// 🔒 Global header instance token to automatically strip out the Ngrok intermediate prompt
+const axiosConfig = {
+  headers: {
+    'ngrok-skip-browser-warning': 'true'
+  }
+};
 
 export default function App() {
   const [file, setFile] = useState(null);
@@ -23,7 +30,7 @@ export default function App() {
     const checkVDIHealth = async () => {
       try {
         const res = await axios.get(`${API_BASE_URL}/api/health`, { 
-          headers: { "ngrok-skip-browser-warning": "69420" },
+          headers: axiosConfig.headers,
           timeout: 3000 
         });
         if (res.data.status === 'online') setVdiOnline(true);
@@ -40,13 +47,16 @@ export default function App() {
   const handleDownload = async (url, filename) => {
     const loadingToast = toast.loading("Preparing secure download...");
     try {
+      // 🚀 Passing full configuration map definitions directly to binary stream retrievals
       const response = await axios.get(url, {
-        headers: { "ngrok-skip-browser-warning": "69420" },
+        headers: axiosConfig.headers,
         responseType: 'blob',
       });
-      const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
+      
+      const blobUrl = window.URL.createObjectURL(new Blob([response.data], { type: 'application/octet-stream' }));
       const link = document.createElement('a');
       link.href = blobUrl;
+      
       const finalName = filename.toLowerCase().endsWith('.pcap') ? filename : `${filename.split('.')[0]}.pcap`;
       link.setAttribute('download', finalName);
       document.body.appendChild(link);
@@ -55,6 +65,7 @@ export default function App() {
       window.URL.revokeObjectURL(blobUrl);
       toast.success("Download Started", { id: loadingToast });
     } catch (error) {
+      console.error("[DOWNLOAD_ERROR]:", error);
       toast.error("Download Failed. File may have expired (1-hour limit).", { id: loadingToast });
     }
   };
@@ -86,7 +97,7 @@ export default function App() {
     try {
       const res = await axios.post(`${API_BASE_URL}/api/convert`, formData, {
         headers: { 
-          "ngrok-skip-browser-warning": "69420",
+          ...axiosConfig.headers,
           "Content-Type": "multipart/form-data"
         },
         timeout: 0 
@@ -98,15 +109,21 @@ export default function App() {
       const interval = setInterval(async () => {
         try {
           const statusRes = await axios.get(`${API_BASE_URL}/api/status/${taskId}`, {
-            headers: { "ngrok-skip-browser-warning": "69420" }
+            headers: axiosConfig.headers
           });
           
           if (statusRes.data.progress > progress) setProgress(statusRes.data.progress);
           
           if (statusRes.data.status === 'completed') {
             clearInterval(interval);
-            const fullUrl = `${API_BASE_URL}${statusRes.data.downloadUrl}`;
-            setDownloadUrl(fullUrl); setStatus('completed');
+            
+            // 🎯 FIXED: Correct standard path mapping for local binary files
+            const rawFilename = `${taskId}.pcap`;
+            const fullUrl = `${API_BASE_URL}/api/download/${rawFilename}`;
+            
+            setDownloadUrl(fullUrl); 
+            setStatus('completed');
+            
             setHistory(prev => [{ id: taskId, name: file.name, size: (file.size / 1024 / 1024).toFixed(2), url: fullUrl }, ...prev]);
             toast.success('Conversion Successful');
           }
@@ -118,7 +135,6 @@ export default function App() {
   return (
     <div className={`min-h-screen transition-colors duration-500 font-sans selection:bg-blue-500/30 relative overflow-x-hidden ${darkMode ? 'bg-[#07090e] text-slate-200' : 'bg-slate-50 text-slate-800'}`}>
       
-      {/* Background Tech Grids & Ambient Glow Layers */}
       <div className="absolute inset-0 pointer-events-none z-0">
         <div 
           className="absolute inset-0 opacity-[0.03] transition-opacity duration-500" 
@@ -167,17 +183,14 @@ export default function App() {
           </div>
         </nav>
 
-        {/* Advanced Two-Column Main Workspace Grid (lg:grid-cols-3) */}
         <main className="max-w-6xl mx-auto px-6 py-12 grid lg:grid-cols-3 gap-8 flex-grow w-full items-start">
           
-          {/* LEFT AREA: Workspace Workspace Panel spans 2 Columns (lg:col-span-2) */}
           <div className="lg:col-span-2 space-y-6">
             <div className={`border rounded-3xl p-8 shadow-xl transition-all duration-500 backdrop-blur-sm ${darkMode ? 'bg-[#12161f]/90 border-white/5' : 'bg-white/90 border-slate-200'}`}>
               <h2 className={`text-2xl font-bold mb-6 flex items-center gap-3 ${darkMode ? 'text-white' : 'text-slate-900'}`}>
                 <Zap className="text-blue-500 w-5 h-5" /> PCAP Reconstruction
               </h2>
 
-              {/* 💡 SIMPLIFIED "HOW IT WORKS" CORE PROCESS */}
               <div className="grid md:grid-cols-3 gap-4 mb-8">
                 <div className={`p-4 rounded-xl border space-y-1 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50 border-slate-200/60'}`}>
                   <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest flex items-center gap-1.5"><ShieldCheck size={12}/> 1. Upload</span>
@@ -193,7 +206,6 @@ export default function App() {
                 </div>
               </div>
               
-              {/* Clean Upload Dropzone Area */}
               <div {...getRootProps()} className={`group border-2 border-dashed rounded-2xl p-16 text-center cursor-pointer transition-all duration-300 ${isDragActive ? 'border-blue-500 bg-blue-500/5' : darkMode ? 'border-slate-800 hover:border-blue-500/40 hover:bg-white/[0.01]' : 'border-slate-300 hover:border-blue-500/40 hover:bg-slate-50'}`}>
                 <input {...getInputProps()} />
                 <Upload className="w-12 h-12 mx-auto mb-4 text-slate-400 group-hover:text-blue-500 transition-colors duration-300" />
@@ -260,13 +272,11 @@ export default function App() {
             </div>
           </div>
 
-          {/* RIGHT AREA: Dedicated Compact Sidebar for Recent Sessions (1 Column) */}
           <div className="lg:col-span-1">
             <div className={`border rounded-3xl p-6 shadow-xl transition-all duration-500 backdrop-blur-sm ${darkMode ? 'bg-[#12161f]/90 border-white/5' : 'bg-white/90 border-slate-200'}`}>
               <h3 className="text-xs font-bold text-slate-400 uppercase mb-5 flex items-center gap-2 tracking-widest">
                 <History size={14} className="text-blue-500"/> Recent Sessions
               </h3>
-              {/* ✨ MODIFIED: Added custom compact max-height boundaries to match design preview */}
               <div className="space-y-3 max-h-[340px] overflow-y-auto pr-2 custom-scrollbar">
                 {history.length > 0 ? history.map((h, i) => (
                   <div key={i} className={`flex justify-between items-center p-3 rounded-xl border transition-all duration-300 ${darkMode ? 'bg-white/[0.02] border-white/5 hover:border-blue-500/30' : 'bg-slate-50 border-slate-200 hover:border-blue-500/30'}`}>
