@@ -7,7 +7,8 @@ import {
   Upload, FileCode, Activity, Zap, Sun, Moon, ShieldCheck, Cpu, FolderHeart, History, Download 
 } from 'lucide-react';
 
-const API_BASE_URL = 'https://occupancy-saturate-handyman.ngrok-free.dev';
+const API_BASE_URL = 'https://coerce-backshift-daunting.ngrok-free.dev';
+
 
 export default function App() {
   const [file, setFile] = useState(null);
