@@ -10,7 +10,7 @@ import {
 // 🌐 Your active, live Ngrok forwarding link address!
 const API_BASE_URL = 'https://coerce-backshift-daunting.ngrok-free.dev';
 
-// 🔒 Global header instance token to automatically strip out the Ngrok intermediate prompt
+// 🔒 Global header instance token to automatically strip out the Ngrok intermediate prompt,
 const axiosConfig = {
   headers: {
     'ngrok-skip-browser-warning': 'true'
