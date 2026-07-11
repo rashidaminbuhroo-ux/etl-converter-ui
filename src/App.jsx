@@ -7,13 +7,13 @@ import {
   Upload, FileCode, Activity, Zap, Sun, Moon, ShieldCheck, Cpu, FolderHeart, History, Download 
 } from 'lucide-react';
 
-// 🌐 Your active, live Ngrok forwarding link address!
-const API_BASE_URL = 'https://coerce-backshift-daunting.ngrok-free.dev';
+// 🌐 Your active LocalTunnel forwarding link!
+const API_BASE_URL = 'https://slick-files-say.loca.lt';
 
-// 🔒 Global header instance token to automatically strip out the Ngrok intermediate prompt,
+// 🔒 Global header instance to automatically bypass the LocalTunnel warning prompt
 const axiosConfig = {
   headers: {
-    'ngrok-skip-browser-warning': 'true'
+    'Bypass-Tunnel-Reminder': 'true'
   }
 };
 
