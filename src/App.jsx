@@ -7,10 +7,10 @@ import {
   Upload, FileCode, Activity, Zap, Sun, Moon, ShieldCheck, Cpu, FolderHeart, History, Download 
 } from 'lucide-react';
 
-// 🌐 ALL-IN-ONE SETUP: Empty string means React will talk to the exact server hosting it!
-const API_BASE_URL = '';
+// 🌐 Your Dedicated AWS EC2 Server IP
+const API_BASE_URL = 'http://35.154.123.161:5000';
 
-// 🔒 Clean standard headers (No tunnel bypass needed!)
+// 🔒 Clean standard headers
 const axiosConfig = {
   headers: {}
 };
