@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 
 // 🌐 Your NEW Dedicated AWS EC2 Server!
-const API_BASE_URL = 'http://43.205.211.143:5000';
+const API_BASE_URL = 'http://35.154.123.161:5000';
 
 // 🔒 Clean standard headers (No tunnel bypass needed for direct IP!)
 const axiosConfig = {
