@@ -7,14 +7,12 @@ import {
   Upload, FileCode, Activity, Zap, Sun, Moon, ShieldCheck, Cpu, FolderHeart, History, Download 
 } from 'lucide-react';
 
-// 🌐 Your active LocalTunnel forwarding link!
-const API_BASE_URL = 'https://black-cobra-66.loca.lt';
+// 🌐 Your NEW Dedicated AWS EC2 Server!
+const API_BASE_URL = 'http://43.205.211.143:5000';
 
-// 🔒 Global header instance to automatically bypass the LocalTunnel warning prompt
+// 🔒 Clean standard headers (No tunnel bypass needed for direct IP!)
 const axiosConfig = {
-  headers: {
-    'Bypass-Tunnel-Reminder': 'true'
-  }
+  headers: {}
 };
 
 export default function App() {
@@ -47,7 +45,6 @@ export default function App() {
   const handleDownload = async (url, filename) => {
     const loadingToast = toast.loading("Preparing secure download...");
     try {
-      // 🚀 Passing full configuration map definitions directly to binary stream retrievals
       const response = await axios.get(url, {
         headers: axiosConfig.headers,
         responseType: 'blob',
@@ -86,7 +83,7 @@ export default function App() {
 
   const handleConvert = async () => {
     if (!vdiOnline) {
-      toast.error("Cannot convert: VDI engine is offline.");
+      toast.error("Cannot convert: EC2 engine is offline.");
       return;
     }
     if (!file) return;
@@ -117,7 +114,6 @@ export default function App() {
           if (statusRes.data.status === 'completed') {
             clearInterval(interval);
             
-            // 🎯 FIXED: Correct standard path mapping for local binary files
             const rawFilename = `${taskId}.pcap`;
             const fullUrl = `${API_BASE_URL}/api/download/${rawFilename}`;
             
@@ -129,7 +125,7 @@ export default function App() {
           }
         } catch (e) { clearInterval(interval); setStatus('idle'); }
       }, 2000); 
-    } catch (err) { setStatus('idle'); toast.error('VDI Transmission Timeout'); }
+    } catch (err) { setStatus('idle'); toast.error('EC2 Transmission Timeout'); }
   };
 
   return (
@@ -176,7 +172,7 @@ export default function App() {
               <div className="flex items-center gap-2">
                 <div className={`w-3 h-3 rounded-full transition-all duration-300 ${vdiOnline ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
                 <span className={`text-xs font-bold uppercase tracking-wider transition-colors duration-300 ${vdiOnline ? 'text-green-500' : 'text-red-500'}`}>
-                  {vdiOnline ? 'VDI Online' : 'VDI Down'}
+                  {vdiOnline ? 'EC2 Online' : 'EC2 Down'}
                 </span>
               </div>
             </div>
@@ -194,15 +190,15 @@ export default function App() {
               <div className="grid md:grid-cols-3 gap-4 mb-8">
                 <div className={`p-4 rounded-xl border space-y-1 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50 border-slate-200/60'}`}>
                   <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest flex items-center gap-1.5"><ShieldCheck size={12}/> 1. Upload</span>
-                  <p className="text-[11px] leading-relaxed opacity-70">Pass .ETL files over an encrypted tunnel gateway bridge.</p>
+                  <p className="text-[11px] leading-relaxed opacity-70">Pass .ETL files straight to your dedicated AWS Cloud engine.</p>
                 </div>
                 <div className={`p-4 rounded-xl border space-y-1 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50 border-slate-200/60'}`}>
                   <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest flex items-center gap-1.5"><Cpu size={12}/> 2. Convert</span>
-                  <p className="text-[11px] leading-relaxed opacity-70">VDI background processing runs native trace compilation.</p>
+                  <p className="text-[11px] leading-relaxed opacity-70">EC2 background processing runs native trace compilation 24/7.</p>
                 </div>
                 <div className={`p-4 rounded-xl border space-y-1 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50 border-slate-200/60'}`}>
                   <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest flex items-center gap-1.5"><FolderHeart size={12}/> 3. Download</span>
-                  <p className="text-[11px] leading-relaxed opacity-70">Retrieve Wireshark-ready .PCAP traces directly to local tabs.</p>
+                  <p className="text-[11px] leading-relaxed opacity-70">Retrieve Wireshark-ready .PCAP traces instantly to local tabs.</p>
                 </div>
               </div>
               
@@ -258,7 +254,7 @@ export default function App() {
                     <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center font-bold text-lg">✓</div>
                     <div>
                       <p className="font-bold text-sm">Processing Complete</p>
-                      <p className="text-[10px] opacity-70 italic font-mono uppercase">VDI Storage Lifecycle Flagged: Purge scheduled in 1 Hour</p>
+                      <p className="text-[10px] opacity-70 italic font-mono uppercase">AWS Storage Lifecycle Flagged: Purge scheduled in 1 Hour</p>
                     </div>
                   </div>
                   <button 
@@ -302,7 +298,7 @@ export default function App() {
 
         <footer className={`py-12 border-t mt-auto transition-all duration-500 ${darkMode ? 'border-white/5 bg-[#0b0e14]/50' : 'border-slate-200 bg-slate-100'}`}>
           <div className="max-w-6xl mx-auto px-6 flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-slate-400">
-            <p>© 2026 ETL CONVERTER</p>
+            <p>© 2026 ETL CONVERTER | HOSTED ON AWS</p>
             <div className="flex items-center gap-2">
                 <span className="italic opacity-70">Designed by:</span>
                 <span className="text-blue-500 tracking-widest">Sahil Amin</span>
