@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 
 // 🌐 Your active LocalTunnel forwarding link!
-const API_BASE_URL = 'https://slick-files-say.loca.lt';
+const API_BASE_URL = 'https://black-cobra-66.loca.lt';
 
 // 🔒 Global header instance to automatically bypass the LocalTunnel warning prompt
 const axiosConfig = {
