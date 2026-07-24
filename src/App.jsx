@@ -85,7 +85,7 @@ export default function App() {
 
   const handleConvert = async () => {
     if (!vdiOnline) {
-      toast.error("Cannot convert: EC2 engine is offline.");
+      toast.error("Cannot convert: VDI engine is offline.");
       return;
     }
     if (!file) return;
@@ -127,7 +127,7 @@ export default function App() {
           }
         } catch (e) { clearInterval(interval); setStatus('idle'); }
       }, 2000); 
-    } catch (err) { setStatus('idle'); toast.error('EC2 Transmission Timeout'); }
+    } catch (err) { setStatus('idle'); toast.error('VDI Transmission Timeout'); }
   };
 
   return (
@@ -174,7 +174,7 @@ export default function App() {
               <div className="flex items-center gap-2">
                 <div className={`w-3 h-3 rounded-full transition-all duration-300 ${vdiOnline ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
                 <span className={`text-xs font-bold uppercase tracking-wider transition-colors duration-300 ${vdiOnline ? 'text-green-500' : 'text-red-500'}`}>
-                  {vdiOnline ? 'EC2 Online' : 'EC2 Down'}
+                  {vdiOnline ? 'VDI Online' : 'VDI Down'}
                 </span>
               </div>
             </div>
@@ -196,7 +196,7 @@ export default function App() {
                 </div>
                 <div className={`p-4 rounded-xl border space-y-1 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50 border-slate-200/60'}`}>
                   <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest flex items-center gap-1.5"><Cpu size={12}/> 2. Convert</span>
-                  <p className="text-[11px] leading-relaxed opacity-70">EC2 background processing runs native trace compilation 24/7.</p>
+                  <p className="text-[11px] leading-relaxed opacity-70">VDI background processing runs native trace compilation 24/7.</p>
                 </div>
                 <div className={`p-4 rounded-xl border space-y-1 ${darkMode ? 'bg-white/[0.01] border-white/5' : 'bg-slate-50 border-slate-200/60'}`}>
                   <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest flex items-center gap-1.5"><FolderHeart size={12}/> 3. Download</span>
