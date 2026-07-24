@@ -7,12 +7,14 @@ import {
   Upload, FileCode, Activity, Zap, Sun, Moon, ShieldCheck, Cpu, FolderHeart, History, Download 
 } from 'lucide-react';
 
-// 🌐 Your Dedicated AWS EC2 Server IP
-const API_BASE_URL = 'http://35.154.123.161:5000';
+// 🌐 1. REPLACE THIS with your exact Ngrok HTTPS link!
+const API_BASE_URL = 'https://numbing-walrus-unwitting.ngrok-free.dev';
 
-// 🔒 Clean standard headers
+// 🔒 2. This exact header permanently bypasses the Ngrok warning screen for your team
 const axiosConfig = {
-  headers: {}
+  headers: {
+    'ngrok-skip-browser-warning': 'true'
+  }
 };
 
 export default function App() {
